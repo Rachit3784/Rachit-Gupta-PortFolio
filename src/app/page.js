@@ -9,8 +9,10 @@ import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import AboutMe from '@/components/Aboutme';
 
+
 export default function Home() {
   useEffect(() => {
+    
     // Check for saved theme or system preference
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

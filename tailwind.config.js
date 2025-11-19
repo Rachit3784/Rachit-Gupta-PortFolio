@@ -9,6 +9,7 @@ module.exports = {
     darkMode: 'class',
     theme: {
       extend: {
+
         animation: {
           'spin-slow': 'spin 3s linear infinite',
           'bounce-slow': 'bounce 2s infinite',

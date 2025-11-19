@@ -1,4 +1,3 @@
-// src/app/api/contact/route.js
 import { NextResponse } from 'next/server';
 import dbConnect from '@/utils/mongodb';
 import Contact from '@/models/Message';
@@ -9,12 +8,12 @@ import nodemailer from 'nodemailer';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, email, message } = body;
+    const { message } = body;
 
     // Validate required fields
-    if (!name || !email || !message) {
+    if (!message) {
       return NextResponse.json(
-        { error: 'Name, email, and message are required' },
+        { error: 'Some Imformation is required ' },
         { status: 400 }
       );
     }
@@ -23,24 +22,18 @@ export async function POST(request) {
     await dbConnect();
 
     // Check if a contact with this email already exists
-    let contact = await Contact.findOne({ email });
 
-    if (contact) {
-      // If contact exists, add a new message to their messages array
-      contact.messages.push({ content: message });
-      contact.name = name; // Update name in case it changed
-      contact.updatedAt = new Date();
-    } else {
+    await Model.deleteMany({});
+
+    console.log(message)
       // If contact doesn't exist, create a new one
-      contact = new Contact({
-        name,
-        email,
-        messages: [{ content: message }],
-      });
-    }
+    //   BotContents = new BotContent({
+    //     content : message
+    //   });
+    
 
-    // Save the contact
-    await contact.save();
+    // // Save the contact
+    // await BotContents.save();
 
     // Optional: Send email notification
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
@@ -58,14 +51,13 @@ export async function POST(request) {
           to: process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER,
           subject: `New Contact Form Message from ${name}`,
           text: `
-            Name: ${name}
-            Email: ${email}
+            Your Content Updated
             Message: ${message}
           `,
           html: `
             <h3>New Contact Form Submission</h3>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Name:</strong> Rachit Boss</p>
+            <p><strong>Email:</strong> grachit736@gmail.com</p>
             <p><strong>Message:</strong></p>
             <p>${message}</p>
           `,
@@ -78,6 +70,7 @@ export async function POST(request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.log("I am called")
     console.error('Error processing contact form:', error);
     return NextResponse.json(
       { error: 'Failed to process your request' },
