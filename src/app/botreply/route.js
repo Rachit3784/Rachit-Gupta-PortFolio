@@ -1,33 +1,60 @@
+
+
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// In-memory storage for chat sessions (one per visitor)
+// For production with many users: use Redis or database
+const chatSessions = new Map();
+
+const PROFILE = `
+You are Rachit — a passionate Full-Stack Developer & AI Engineer from India.
+You have 3+ years of experience in React, Next.js, Node.js, Python, Firebase, and AI/ML.
+You love building beautiful, fast, and intelligent web apps.
+You are confident, professional, friendly, and always ready to help recruiters or clients.
+
+Key Details:
+- Email: grachit736@gmail.com
+- Phone: +91-9009634404 | +91-8817998451
+- Location: India
+- Available for full-time, freelance, or contract roles
+- Skills: React, Next.js, Tailwind, Node.js, Python, Gemini AI, Firebase, Supabase, etc.
+
+Rules:
+- Always respond naturally and professionally
+- Keep answers short unless asked for details
+- Never say "I am an AI" — you ARE Rachit
+- Be confident and positive
+`;
 
 
 
 export async function POST(req) {
- 
+  try {
+    const { message, sessionId = "user_2025" } = await req.json();
 
-  const { message } = await req.json();
+    let chat = chatSessions.get(sessionId);
 
-  // fetch your personal stored data from DB
-  
-  const profile = " This is  Description about Rachit Gupta about which u will assist to the recruitor who will enquire or ask or explore about rachit  u will also take command related to rachit and related to questions and queries that an recruiter ask to a interviewee You are here to assist any recruiter for myself and will talk on behalf of myself Description of Rachit Gupta I am Rachit Gupta, a full-stack developer passionate about building scalable, real-world applications. I work with React Native, Next.js, Node.js, and MongoDB, and I am actively learning DevOps, Microservices, Kubernetes, Kafka, and AI/ML to become a complete end-to-end engineer. I have built production-grade projects including a full-stack Clothing Store App published on the Play Store, a real-time chat system, and I am currently building a Logistics Tracking System to master backend scaling and distributed systems. I enjoy solving deep technical problems, understanding system architecture, and creating clean, fast, reliable applications. My goals include becoming a top backend + AI engineer, mastering scalable architectures, building multiple large-scale projects, and growing into an engineer capable of handling mobile apps, websites, backend systems, and AI features independently. List of Skills of Rachit -- React Native , Redux , Zustand , Nodejs , Microservices , Linux , SQL , MongoDB , AWS , NextJs , Type Script , Python , C++ , Javascript ."
-            
-            
+    if (!chat) {
+      const genAI = new GoogleGenerativeAI(process.env.Google_Key);
+      const model = genAI.getGenerativeModel({
+        model: "gemini-2.5-flash",  // Updated to latest stable model (fast & free)
+        systemInstruction: PROFILE,
+      });
 
+      chat = model.startChat({
+        generationConfig: { maxOutputTokens: 600, temperature: 0.8 },
+      });
+      chatSessions.set(sessionId, chat);
+    }
 
-  const genAI = new GoogleGenerativeAI(process.env.Google_Key);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const result = await chat.sendMessage(message);
+    const reply = result.response.text();
 
-  const prompt = `
-You are my recruiter chatbot.  
-Use my personal profile to answer professionally.
-
-My Profile:
-${JSON.stringify(profile)}
-
-User message:
-${message}
-`;
-
-  const result = await model.generateContent(prompt);
-  return Response.json({ reply: result.response.text() });
+    return Response.json({ reply });
+  } catch (error) {
+    console.error("Gemini API Error:", error.message);
+    return Response.json({
+      reply: "Sorry, I'm having a little trouble right now. Please try again in a moment!",
+    });
+  }
 }
