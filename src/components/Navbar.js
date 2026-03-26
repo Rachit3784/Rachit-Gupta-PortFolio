@@ -22,6 +22,7 @@ const Navbar = () => {
       // Check which section is currently in the viewport
       const sections = [
         { id: 'home', name: 'home' },
+        { id: 'experience', name: 'experience' },
         { id: 'services', name: 'services' },
         { id: 'projects', name: 'projects' },
         { id: 'about', name: 'aboutme' },
@@ -69,12 +70,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md dark:bg-gray-900' : 'bg-transparent'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg dark:bg-gray-900' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center cursor-pointer" onClick={() => scrollToSection('home', 'home')}>
-            <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-violet-400">
-              <div className="absolute bg-blue-600 dark:bg-violet-600 rounded-full blur-xl opacity-20 animate-pulse"></div>
+            <Link href="/" className="text-2xl font-bold text-black dark:text-yellow-400">
+              <div className="absolute bg-black dark:bg-yellow-400 rounded-full blur-xl opacity-20 animate-pulse"></div>
               <div className="relative rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-xl">
                 <Image
                   src="/Profile.jpg"
@@ -94,51 +95,60 @@ const Navbar = () => {
               <div className="relative cursor-pointer">
                 <button
                   onClick={() => scrollToSection('home', 'home')}
-                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-blue-600 dark:hover:text-violet-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   Home
                 </button>
-                <div className={`h-1 bg-blue-500 rounded-full transition-transform duration-200 origin-left dark:bg-violet-500 border-t-2 border-violet-600 ${activeLine === "home" ? "scale-x-100" : "scale-x-0"}`} />
+                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "home" ? "scale-x-100" : "scale-x-0"}`} />
+              </div>
+              <div className="cursor-pointer">
+                <button
+                  onClick={() => scrollToSection('experience', 'experience')}
+                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Experience
+                </button>
+                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "experience" ? "scale-x-100" : "scale-x-0"}`} />
               </div>
               <div className="cursor-pointer">
                 <button
                   onClick={() => scrollToSection('services', 'services')}
-                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-blue-600 dark:hover:text-violet-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   Services
                 </button>
-                <div className={`h-1 bg-blue-500 rounded-full transition-transform duration-200 origin-left dark:bg-violet-500 border-t-2 border-violet-600 ${activeLine === "services" ? "scale-x-100" : "scale-x-0"}`} />
+                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "services" ? "scale-x-100" : "scale-x-0"}`} />
               </div>
               <div className="cursor-pointer">
                 <button
                   onClick={() => scrollToSection('projects', 'projects')}
-                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-blue-600 dark:hover:text-violet-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   Projects
                 </button>
-                <div className={`h-1 bg-blue-500 rounded-full transition-transform duration-200 origin-left dark:bg-violet-500 border-t-2 border-violet-600 ${activeLine === "projects" ? "scale-x-100" : "scale-x-0"}`} />
+                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "projects" ? "scale-x-100" : "scale-x-0"}`} />
               </div>
               <div className="cursor-pointer">
                 <button
                   onClick={() => scrollToSection('about', 'aboutme')}
-                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-blue-600 dark:hover:text-violet-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   About Me
                 </button>
-                <div className={`h-1 bg-blue-500 rounded-full transition-transform duration-200 origin-left dark:bg-violet-500 border-t-2 border-violet-600 ${activeLine === "aboutme" ? "scale-x-100" : "scale-x-0"}`} />
+                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "aboutme" ? "scale-x-100" : "scale-x-0"}`} />
               </div>
               <a
                 href="https://www.github.com/Rachit3784"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-violet-400 px-2 flex items-center justify-center py-2 rounded-md text-sm font-medium transition-colors"
+                className="text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-yellow-400 px-2 flex items-center justify-center py-2 rounded-md text-sm font-medium transition-colors"
               >
                 <FaGithub className="inline-block mr-1" size={18} />
                 GitHub
               </a>
               <button
                 onClick={() => scrollToSection('contact', 'contact')}
-                className="bg-blue-600 hover:bg-blue-700 cursor-pointer dark:bg-violet-600 dark:hover:bg-violet-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                className="bg-black hover:bg-gray-800 cursor-pointer dark:bg-yellow-400 dark:hover:bg-yellow-300 text-white dark:text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105"
               >
                 Contact Me
               </button>
@@ -151,7 +161,7 @@ const Navbar = () => {
             <ThemeToggle />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-violet-400 focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-yellow-400 focus:outline-none"
             >
               <svg
                 className="h-6 w-6"
@@ -186,31 +196,37 @@ const Navbar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <button
               onClick={() => scrollToSection('home', 'home')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-800"
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               Home
             </button>
             <button
+              onClick={() => scrollToSection('experience', 'experience')}
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              Experience
+            </button>
+            <button
               onClick={() => scrollToSection('services', 'services')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-800"
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               Services
             </button>
             <button
               onClick={() => scrollToSection('projects', 'projects')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-800"
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               Projects
             </button>
             <button
               onClick={() => scrollToSection('about', 'aboutme')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-800"
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               About Me
             </button>
             <button
               onClick={() => scrollToSection('contact', 'contact')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-800"
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               Contact Me
             </button>
@@ -218,7 +234,7 @@ const Navbar = () => {
               href="https://www.github.com/Rachit3784"
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-800"
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               GitHub
             </a>

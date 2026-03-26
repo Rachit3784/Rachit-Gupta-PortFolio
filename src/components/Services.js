@@ -19,24 +19,24 @@ const ServiceCard = ({ service }) => {
   return (
     <motion.div
       whileHover={{ y: -10 }}
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-all duration-300 hover:shadow-xl"
+      className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 transition-all duration-300 hover:shadow-2xl border border-gray-100 dark:border-gray-700"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex flex-col items-center text-center">
-        <div className="p-4 bg-blue-100 dark:bg-gray-700 rounded-full mb-4">
-          <IconComponent className="text-blue-600 dark:text-violet-400 text-3xl" />
+        <div className="p-5 bg-gray-100 dark:bg-gray-700 rounded-2xl mb-5">
+          <IconComponent className="text-gray-900 dark:text-yellow-400 text-4xl" />
         </div>
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{service.title}</h3>
-        <p className="text-gray-600 dark:text-gray-300 mb-6">{service.description}</p>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{service.title}</h3>
+        <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">{service.description}</p>
         
-        <div className={`transition-all duration-300 overflow-hidden ${isHovered ? 'max-h-52 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <p className="text-gray-800 dark:text-gray-200 font-medium mb-2">Technologies:</p>
+        <div className={`transition-all duration-500 overflow-hidden ${isHovered ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <p className="text-gray-900 dark:text-white font-semibold mb-3">Technologies:</p>
           <div className="flex flex-wrap justify-center gap-2">
             {service.technologies.map((tech, index) => (
               <span 
                 key={index}
-                className="px-3 py-1 bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-violet-400 text-sm rounded-full"
+                className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-yellow-300 text-sm font-medium rounded-lg"
               >
                 {tech}
               </span>
@@ -50,47 +50,88 @@ const ServiceCard = ({ service }) => {
 
 const Services = () => {
   return (
-    <section id="services" className="py-20 bg-gray-50 dark:bg-gray-900">
+    <section id="services" className="py-24 bg-gray-50 dark:bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">My Services</h2>
-          <div className="mt-2 h-1 w-20 bg-blue-600 dark:bg-violet-400 mx-auto"></div>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            I offer a range of services to help bring your digital ideas to life. Hover over each card to learn more.
-          </p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
+          >
+            My Expertise
+          </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="h-1 w-24 bg-black dark:bg-yellow-400 mx-auto rounded-full"
+          />
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="mt-6 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
+          >
+            Specialized in React Native and MERN Stack development
+          </motion.p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service) => (
-            <ServiceCard key={service.id} service={service} />
+          {services.map((service, index) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <ServiceCard service={service} />
+            </motion.div>
           ))}
         </div>
         
-        <div className="mt-16 text-center">
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">My Skills</h3>
-          <div className="flex flex-wrap justify-center gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-20 text-center"
+        >
+          <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-10">Tech Stack</h3>
+          <div className="flex flex-wrap justify-center gap-6">
             {[
+              { name: 'React Native', logo: '/logos/reactnative.svg' },
               { name: 'React', logo: '/logos/react.svg' },
-              { name: 'Next.js', logo: '/logos/nextjs.svg' },
               { name: 'Node.js', logo: '/logos/node.svg' },
+              { name: 'MongoDB', logo: '/logos/mongodb.svg' },
+              { name: 'Next.js', logo: '/logos/nextjs.svg' },
+              { name: 'Express', logo: '/logos/express.png' },
+              { name: 'TypeScript', logo: '/logos/Typescript.png' },
               { name: 'JavaScript', logo: '/logos/javascript.svg' },
               { name: 'Tailwind CSS', logo: '/logos/tailwind.svg' },
-              { name: 'React Native', logo: '/logos/reactnative.svg' },
               { name: 'Redux', logo: '/logos/redux.svg' },
-              { name: 'Python', logo: '/logos/python.svg' },
-              { name: 'C++', logo: '/logos/Cplus.svg' },
+              { name: 'Firebase', logo: '/logos/logo-vertical.png' },
+             
             ].map((skill, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-md p-3">
+              <motion.div 
+                key={index} 
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="flex flex-col items-center group"
+              >
+                <div className="w-20 h-20 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow-lg p-4 border border-gray-100 dark:border-gray-700 group-hover:border-black dark:group-hover:border-yellow-400 transition-all duration-300 group-hover:scale-110">
                   <div className="relative w-full h-full">
                     <Image src={skill.logo} alt={skill.name} layout="fill" objectFit="contain" />
                   </div>
                 </div>
-                <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">{skill.name}</p>
-              </div>
+                <p className="mt-3 text-sm font-medium text-gray-700 dark:text-gray-300">{skill.name}</p>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

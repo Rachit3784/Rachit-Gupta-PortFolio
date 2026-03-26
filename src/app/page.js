@@ -7,6 +7,7 @@ import Services from '../components/Services';
 import Projects from '../components/Projects';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import Experience from '../components/Experience';
 import AboutMe from '@/components/Aboutme';
 
 
@@ -28,6 +29,7 @@ export default function Home() {
     <main className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       <Navbar />
       <HeroSection />
+      <Experience />
       <Services />
       <Projects />
       <Contact />
