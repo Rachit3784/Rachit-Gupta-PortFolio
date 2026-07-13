@@ -97,24 +97,15 @@ const FloatingActionButton = () => {
 
             {/* 2. The Main Bot Button (Always visible) */}
             <button
-
-                // Apply the primary glowing style to the main button
+                onClick={() => router.push('/Chat')}
+                title="Chat with Rachit's AI Assistant"
                 className={`
-                    cursor-pointer p-4 rounded-full shadow-lg z-10 transition-all duration-300 transform-gpu
-                    mt-5
-                    // --------------------- DARK MODE (Black/Yellow Glow) ---------------------
-                    dark:bg-black dark:text-yellow-400 
-                    // Intense glowing shadow in dark mode
-                    dark:shadow-[0_0_25px_rgba(252,211,77,0.9)] 
-                    dark:hover:scale-110 dark:hover:shadow-[0_0_35px_rgba(252,211,77,1)]
-                    
-                    // --------------------- LIGHT MODE (White/Subtle Glow) ---------------------
-                    bg-white text-black 
-                    shadow-xl hover:scale-110 hover:shadow-yellow-400/50
+                    cursor-pointer p-4 rounded-full shadow-xl z-10 transition-all duration-300 transform-gpu
+                    mt-5 bg-orange-500 hover:bg-orange-600 text-white
+                    hover:scale-105 shadow-orange-200 dark:shadow-orange-900/30
                 `}
             >
-                {/* Use the Bot icon from Lucide React */}
-                <Bot className='w-5 h-5' />
+                <Bot className='w-6 h-6' />
             </button>
         </div>
     );

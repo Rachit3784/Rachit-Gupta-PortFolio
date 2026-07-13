@@ -1,192 +1,250 @@
-// components/Experience.js
+// components/Experience.js — Horizontal Auto-Scroll Carousel + 90s Dense Business Style
 "use client";
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { experiences } from '../data/experience';
-import { FaCalendarAlt, FaMapMarkerAlt, FaBriefcase, FaDownload, FaExternalLinkAlt } from 'react-icons/fa';
-import { Award, Building2 } from 'lucide-react';
+import { FaCalendarAlt, FaMapMarkerAlt, FaBriefcase, FaExternalLinkAlt } from 'react-icons/fa';
+import { Award, Building2, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const ExperienceCard = ({ experience, index }) => {
+/* Stats bar */
+const EXP_STATS = [
+  { value: '2',   label: 'Internships' },
+  { value: '6+',  label: 'Months Exp.'  },
+  { value: '5+',  label: 'Live Projects' },
+  { value: '3',   label: 'Stacks'        },
+];
+
+/* ── Experience Card (dense 90s business style) ──────── */
+const ExperienceCard = ({ experience }) => {
+  const [expanded, setExpanded] = useState(false);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.2 }}
-      className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
+    <div
+      className="flex-shrink-0 w-80 sm:w-[420px] bg-white dark:bg-gray-900
+        border border-gray-200 dark:border-gray-800
+        rounded-2xl overflow-hidden snap-start
+        hover:border-orange-400 hover:shadow-xl transition-all duration-300"
     >
-      {/* Header with Company Logo and Role */}
-      <div className="flex flex-col md:flex-row gap-6 items-start md:items-center mb-6">
-        {/* Company Logo */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="relative w-24 h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700 flex-shrink-0 border border-gray-200 dark:border-gray-600 shadow-md"
-        >
-          <Image
-            src={experience.companyLogo}
-            alt={`${experience.company} logo`}
-            fill
-            className="object-contain p-2"
-          />
-        </motion.div>
+      {/* Top orange accent bar */}
+      <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 to-amber-400" />
 
-        {/* Role and Company Info */}
-        <div className="flex-1">
-          <div className="flex flex-wrap items-center gap-3 mb-2">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {experience.role}
-            </h3>
-            <span className="px-3 py-1 bg-black dark:bg-yellow-400 text-white dark:text-black text-sm font-semibold rounded-full">
-              {experience.type}
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 mb-3">
-            <Building2 size={18} />
-            <span className="font-semibold text-lg">{experience.company}</span>
+      {/* Header */}
+      <div className="p-6 pb-4">
+        <div className="flex items-start gap-4">
+          {/* Company Logo */}
+          <div className="relative w-14 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden flex-shrink-0">
+            <Image src={experience.companyLogo} alt={experience.company} fill className="object-contain p-2" />
           </div>
 
-          {/* Duration and Location */}
-          <div className="flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400">
-            <div className="flex items-center gap-1.5">
-              <FaCalendarAlt size={14} />
-              <span>{experience.duration}</span>
-              <span className="text-gray-400">·</span>
-              <span className="font-medium text-gray-700 dark:text-gray-300">{experience.durationLabel}</span>
+          {/* Role + Meta */}
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <h3 className="text-base font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+                {experience.role}
+              </h3>
+              <span className="px-2 py-0.5 bg-orange-500 text-white text-[9px] font-black rounded uppercase tracking-widest">
+                {experience.type}
+              </span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <FaMapMarkerAlt size={14} />
-              <span>{experience.location}</span>
+
+            <div className="flex items-center gap-1.5 mb-2">
+              <Building2 size={12} className="text-orange-500 flex-shrink-0" />
+              <span className="text-xs font-bold text-gray-700 dark:text-gray-300 truncate">{experience.company}</span>
+            </div>
+
+            <div className="flex flex-wrap gap-3 text-[11px] text-gray-500 dark:text-gray-400">
+              <span className="flex items-center gap-1">
+                <FaCalendarAlt size={10} className="text-orange-400" />
+                {experience.duration}
+                <span className="font-bold text-gray-700 dark:text-gray-300 ml-1">· {experience.durationLabel}</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <FaMapMarkerAlt size={10} className="text-orange-400" />
+                {experience.location}
+              </span>
             </div>
           </div>
+
+          {/* Certificate */}
+          {experience.certificate && (
+            <a href={experience.certificate} target="_blank" rel="noopener noreferrer"
+              className="flex-shrink-0 w-9 h-9 bg-gray-100 dark:bg-gray-800 hover:bg-orange-500 rounded-lg flex items-center justify-center text-gray-500 hover:text-white transition-all duration-300"
+              title="View Certificate">
+              <Award size={15} />
+            </a>
+          )}
         </div>
-
-        {/* Certificate Button */}
-        {experience.certificate && (
-          <motion.a
-            href={experience.certificate}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 px-5 py-3 bg-black dark:bg-yellow-400 text-white dark:text-black font-semibold rounded-xl hover:bg-gray-800 dark:hover:bg-yellow-300 transition-all duration-300 shadow-lg"
-          >
-            <Award size={20} />
-            <span>View Certificate</span>
-            <FaExternalLinkAlt size={14} />
-          </motion.a>
-        )}
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-gray-200 dark:bg-gray-700 mb-6"></div>
+      <div className="mx-6 h-px bg-gray-100 dark:bg-gray-800" />
 
-      {/* Description */}
-      <div className="mb-6">
-        <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
-          Key Responsibilities & Achievements
-        </h4>
-        <ul className="space-y-3">
-          {experience.description.map((item, idx) => (
-            <motion.li
-              key={idx}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 + idx * 0.1 }}
-              className="flex items-start gap-3 text-gray-700 dark:text-gray-300"
-            >
-              <span className="w-2 h-2 bg-black dark:bg-yellow-400 rounded-full mt-2 flex-shrink-0"></span>
-              <span className="leading-relaxed">{item}</span>
-            </motion.li>
+      {/* Responsibilities */}
+      <div className="p-6 pt-4">
+        <p className="text-[9px] font-black text-orange-500 uppercase tracking-widest mb-3">
+          Key Deliverables
+        </p>
+        <ul className="space-y-2">
+          {(expanded ? experience.description : experience.description.slice(0, 2)).map((item, i) => (
+            <li key={i} className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+              <CheckCircle2 size={13} className="text-orange-500 flex-shrink-0 mt-0.5" />
+              {item}
+            </li>
           ))}
         </ul>
-      </div>
+        {experience.description.length > 2 && (
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="mt-3 text-[11px] font-bold text-orange-500 hover:text-orange-600 transition-colors cursor-pointer flex items-center gap-1"
+          >
+            {expanded ? 'Show less ↑' : `+${experience.description.length - 2} more deliverables ↓`}
+          </button>
+        )}
 
-      {/* Technologies */}
-      <div>
-        <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-          Technologies Used
-        </h4>
-        <div className="flex flex-wrap gap-2">
-          {experience.technologies.map((tech, idx) => (
-            <span
-              key={idx}
-              className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-yellow-300 text-sm font-medium rounded-lg border border-gray-200 dark:border-gray-600"
-            >
-              {tech}
-            </span>
-          ))}
+        {/* Tech tags */}
+        <div className="mt-4">
+          <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Stack</p>
+          <div className="flex flex-wrap gap-1">
+            {experience.technologies.map((t, i) => (
+              <span key={i}
+                className="px-2 py-0.5 bg-orange-50 dark:bg-orange-950/20 text-orange-600 dark:text-orange-400 text-[10px] font-semibold rounded border border-orange-100 dark:border-orange-900/40">
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
-const Experience = () => {
+/* ── Draggable Carousel with controls ───────────────── */
+const ExperienceCarousel = () => {
+  const ref = useRef(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const autoTimer = useRef(null);
+  const [paused, setPaused] = useState(false);
+
+  // Only 2 experiences, so just repeat for demo
+  const items = [...experiences, ...experiences, ...experiences, ...experiences];
+
+  const stopAuto = () => clearInterval(autoTimer.current);
+  const startAuto = () => {
+    stopAuto();
+    autoTimer.current = setInterval(() => {
+      if (!ref.current || paused) return;
+      ref.current.scrollLeft += 0.7;
+      const { scrollLeft: sl, scrollWidth, clientWidth } = ref.current;
+      if (sl >= (scrollWidth - clientWidth) * 0.5) {
+        ref.current.scrollLeft = 0;
+      }
+    }, 16);
+  };
+
+  useEffect(() => { startAuto(); return stopAuto; }, [paused]);
+
+  const scroll = (dir) => {
+    ref.current?.scrollBy({ left: dir * 440, behavior: 'smooth' });
+  };
+
   return (
-    <section id="experience" className="py-24 bg-gray-50 dark:bg-black">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Work Experience
-          </h2>
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="h-1 w-24 bg-black dark:bg-yellow-400 mx-auto rounded-full"
-          />
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="mt-6 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
-          >
-            Professional experience as a Software & Application Developer
-          </motion.p>
-        </motion.div>
+    <div className="relative">
+      {/* Nav Arrows */}
+      <button onClick={() => scroll(-1)}
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full shadow-md flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all -translate-x-5 cursor-pointer">
+        <ChevronLeft size={18} />
+      </button>
+      <button onClick={() => scroll(1)}
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full shadow-md flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all translate-x-5 cursor-pointer">
+        <ChevronRight size={18} />
+      </button>
 
-        {/* Experience Cards */}
-        <div className="space-y-8">
-          {experiences.map((experience, index) => (
-            <ExperienceCard
-              key={experience.id}
-              experience={experience}
-              index={index}
-            />
-          ))}
-        </div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="mt-16 text-center"
-        >
-          <a
-            href="https://www.linkedin.com/in/rachit-gupta-099999261"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-black dark:border-yellow-400 text-black dark:text-yellow-400 font-semibold rounded-xl hover:bg-black hover:text-white dark:hover:bg-yellow-400 dark:hover:text-black transition-all duration-300"
-          >
-            <FaBriefcase size={20} />
-            View Full Profile on LinkedIn
-          </a>
-        </motion.div>
+      <div
+        ref={ref}
+        onMouseDown={(e) => {
+          isDragging.current = true; stopAuto();
+          startX.current = e.pageX - ref.current.offsetLeft;
+          scrollLeft.current = ref.current.scrollLeft;
+        }}
+        onMouseLeave={() => { isDragging.current = false; setPaused(false); startAuto(); }}
+        onMouseUp={() => { isDragging.current = false; startAuto(); }}
+        onMouseMove={(e) => {
+          if (!isDragging.current) return;
+          e.preventDefault();
+          const x = e.pageX - ref.current.offsetLeft;
+          ref.current.scrollLeft = scrollLeft.current - (x - startX.current) * 1.5;
+        }}
+        onMouseEnter={() => { stopAuto(); setPaused(true); }}
+        className="flex gap-5 overflow-x-auto hide-scrollbar cursor-grab active:cursor-grabbing pb-4 px-2 snap-x"
+        style={{ userSelect: 'none' }}
+      >
+        {items.map((exp, i) => (
+          <ExperienceCard key={i} experience={exp} />
+        ))}
       </div>
-    </section>
+
+      {/* Fade masks */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-12 z-10"
+        style={{ background: 'linear-gradient(to right, #f8f8f8, transparent)' }} />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-12 z-10"
+        style={{ background: 'linear-gradient(to left, #f8f8f8, transparent)' }} />
+    </div>
   );
 };
+
+/* ── Main Section ────────────────────────────────────── */
+const Experience = () => (
+  <section id="experience" className="py-24 bg-[#f8f8f8] dark:bg-[#111827] overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {/* Section Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        className="text-center mb-12"
+      >
+        <div className="saas-section-badge mx-auto mb-4">Work Journey</div>
+        <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
+          Work <span className="gradient-orange">Experience</span>
+        </h2>
+        <div className="h-1 w-16 bg-orange-500 mx-auto rounded-full mb-5" />
+        <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto text-base">
+          Drag to explore · Hands-on internship experience shipping live web & mobile applications
+        </p>
+      </motion.div>
+
+      {/* Carousel */}
+      <ExperienceCarousel />
+
+      {/* Stats Bar */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4"
+      >
+        {EXP_STATS.map((stat, i) => (
+          <div key={i}
+            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 text-center hover:border-orange-400 transition-colors">
+            <div className="text-3xl font-black gradient-orange mb-1">{stat.value}</div>
+            <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">{stat.label}</div>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* LinkedIn CTA */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        className="mt-10 text-center"
+      >
+        <a href="https://www.linkedin.com/in/rachit-gupta-099999261" target="_blank" rel="noopener noreferrer"
+          className="saas-btn-outline inline-flex">
+          <FaBriefcase size={16} />
+          View Full Profile on LinkedIn
+        </a>
+      </motion.div>
+    </div>
+  </section>
+);
 
 export default Experience;

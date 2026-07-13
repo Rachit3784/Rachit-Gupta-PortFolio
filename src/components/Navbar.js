@@ -1,247 +1,180 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaGithub } from 'react-icons/fa';
-import ThemeToggle from './ThemeToggle';
 import Image from 'next/image';
+import { FaGithub, FaLinkedin, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { Menu, X } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
+
+const NAV_ITEMS = [
+  { label: 'Home',       sectionId: 'home',       lineKey: 'home'       },
+  { label: 'Services',   sectionId: 'services',   lineKey: 'services'   },
+  { label: 'Projects',   sectionId: 'projects',   lineKey: 'projects'   },
+  { label: 'Experience', sectionId: 'experience', lineKey: 'experience' },
+  { label: 'About Me',   sectionId: 'about',      lineKey: 'aboutme'    },
+];
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeLine, setActiveLine] = useState("home");
+  const [scrolled, setScrolled]       = useState(false);
+  const [mobileOpen, setMobileOpen]   = useState(false);
+  const [activeSection, setActive]    = useState('home');
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Change background when scrolled
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-
-      // Check which section is currently in the viewport
-      const sections = [
-        { id: 'home', name: 'home' },
-        { id: 'experience', name: 'experience' },
-        { id: 'services', name: 'services' },
-        { id: 'projects', name: 'projects' },
-        { id: 'about', name: 'aboutme' },
-        { id: 'contact', name: 'contact' }
-      ];
-
-      // Find which section is most visible in the viewport
-      let maxVisibleSection = null;
-      let maxVisibleHeight = 0;
-
-      sections.forEach(({ id, name }) => {
-        const section = document.getElementById(id);
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
-          
-          // If this section has more visible area than any previous one, it becomes the active section
-          if (visibleHeight > maxVisibleHeight && visibleHeight > 0) {
-            maxVisibleHeight = visibleHeight;
-            maxVisibleSection = name;
-          }
-        }
+    const onScroll = () => {
+      setScrolled(window.scrollY > 60);
+      const sections = NAV_ITEMS.map(n => ({ id: n.sectionId, key: n.lineKey }));
+      let maxH = 0, active = 'home';
+      sections.forEach(({ id, key }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const h = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+        if (h > maxH && h > 0) { maxH = h; active = key; }
       });
-
-      // Update active line if we found a visible section
-      if (maxVisibleSection) {
-        setActiveLine(maxVisibleSection);
-      }
+      setActive(active);
     };
-
-    window.addEventListener('scroll', handleScroll);
-    // Run once on mount to set initial active section
-    handleScroll();
-    
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollToSection = (sectionId, lineName) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-      setActiveLine(lineName);
-      setMobileMenuOpen(false);
-    }
+  const scrollTo = (id, key) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setActive(key);
+    setMobileOpen(false);
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg dark:bg-gray-900' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center cursor-pointer" onClick={() => scrollToSection('home', 'home')}>
-            <Link href="/" className="text-2xl font-bold text-black dark:text-yellow-400">
-              <div className="absolute bg-black dark:bg-yellow-400 rounded-full blur-xl opacity-20 animate-pulse"></div>
-              <div className="relative rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-xl">
-                <Image
-                  src="/Profile.jpg"
-                  alt="Rachit Gupta"
-                  width={45}
-                  height={45}
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </Link>
+    <header className="fixed top-0 left-0 right-0 z-50 font-[Poppins]">
+      {/* ── Top Contact Bar ─────────────────────────────────── */}
+      <div className="bg-[#1a1a1a] dark:bg-[#0d0d0d] text-white text-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-9">
+          <div className="hidden md:flex items-center gap-6">
+            <a href="mailto:grachit736@gmail.com"
+               className="flex items-center gap-1.5 hover:text-orange-400 transition-colors">
+              <FaEnvelope size={11} />
+              grachit736@gmail.com
+            </a>
+            <span className="text-gray-600">|</span>
+            <a href="tel:+919009634404"
+               className="flex items-center gap-1.5 hover:text-orange-400 transition-colors">
+              <FaPhone size={11} />
+              +91-9009634404
+            </a>
           </div>
-
-          {/* Desktop menu */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-2">
-              <div className="relative cursor-pointer">
-                <button
-                  onClick={() => scrollToSection('home', 'home')}
-                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Home
-                </button>
-                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "home" ? "scale-x-100" : "scale-x-0"}`} />
-              </div>
-              <div className="cursor-pointer">
-                <button
-                  onClick={() => scrollToSection('experience', 'experience')}
-                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Experience
-                </button>
-                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "experience" ? "scale-x-100" : "scale-x-0"}`} />
-              </div>
-              <div className="cursor-pointer">
-                <button
-                  onClick={() => scrollToSection('services', 'services')}
-                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Services
-                </button>
-                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "services" ? "scale-x-100" : "scale-x-0"}`} />
-              </div>
-              <div className="cursor-pointer">
-                <button
-                  onClick={() => scrollToSection('projects', 'projects')}
-                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Projects
-                </button>
-                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "projects" ? "scale-x-100" : "scale-x-0"}`} />
-              </div>
-              <div className="cursor-pointer">
-                <button
-                  onClick={() => scrollToSection('about', 'aboutme')}
-                  className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-black dark:hover:text-yellow-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  About Me
-                </button>
-                <div className={`h-1 bg-black rounded-full transition-transform duration-200 origin-left dark:bg-yellow-400 ${activeLine === "aboutme" ? "scale-x-100" : "scale-x-0"}`} />
-              </div>
-              <a
-                href="https://www.github.com/Rachit3784"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-yellow-400 px-2 flex items-center justify-center py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                <FaGithub className="inline-block mr-1" size={18} />
-                GitHub
-              </a>
-              <button
-                onClick={() => scrollToSection('contact', 'contact')}
-                className="bg-black hover:bg-gray-800 cursor-pointer dark:bg-yellow-400 dark:hover:bg-yellow-300 text-white dark:text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105"
-              >
-                Contact Me
-              </button>
-              <ThemeToggle />
-            </div>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
-            <ThemeToggle />
+          <div className="flex items-center gap-4 ml-auto">
+            <a href="https://github.com/Rachit3784" target="_blank" rel="noopener noreferrer"
+               className="hover:text-orange-400 transition-colors">
+              <FaGithub size={14} />
+            </a>
+            <a href="https://www.linkedin.com/in/rachit-gupta-099999261" target="_blank" rel="noopener noreferrer"
+               className="hover:text-orange-400 transition-colors">
+              <FaLinkedin size={14} />
+            </a>
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-yellow-400 focus:outline-none"
-            >
-              <svg
-                className="h-6 w-6"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                {mobileMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
+              onClick={() => scrollTo('contact', 'contact')}
+              className="px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded text-[11px] tracking-wide transition-colors cursor-pointer">
+              Hire Me ↗
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-900 shadow-lg">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <button
-              onClick={() => scrollToSection('home', 'home')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              Home
-            </button>
-            <button
-              onClick={() => scrollToSection('experience', 'experience')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              Experience
-            </button>
-            <button
-              onClick={() => scrollToSection('services', 'services')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              Services
-            </button>
-            <button
-              onClick={() => scrollToSection('projects', 'projects')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              Projects
-            </button>
-            <button
-              onClick={() => scrollToSection('about', 'aboutme')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              About Me
-            </button>
-            <button
-              onClick={() => scrollToSection('contact', 'contact')}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              Contact Me
-            </button>
-            <a
-              href="https://www.github.com/Rachit3784"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              GitHub
-            </a>
+      {/* ── Main Navbar ─────────────────────────────────────── */}
+      <nav className={`transition-all duration-300 ${
+        scrolled
+          ? 'bg-white dark:bg-gray-950 shadow-md'
+          : 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm'
+      } border-b border-gray-100 dark:border-gray-800`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+
+            {/* Logo */}
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollTo('home', 'home')}>
+              <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-orange-500 ring-offset-1">
+                <Image src="/Profile.jpg" alt="Rachit Gupta" fill className="object-cover" priority />
+              </div>
+              <div className="hidden sm:block">
+                <div className="text-lg font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+                  RACHIT <span className="text-orange-500">GUPTA</span>
+                </div>
+                <div className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 -mt-0.5 tracking-widest uppercase">
+                  Full-Stack Engineer
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Nav */}
+            <div className="hidden md:flex items-center gap-1">
+              {NAV_ITEMS.map(item => (
+                <div key={item.lineKey} className="relative">
+                  <button
+                    onClick={() => scrollTo(item.sectionId, item.lineKey)}
+                    className={`relative px-4 py-5 text-sm font-semibold transition-colors duration-200 cursor-pointer ${
+                      activeSection === item.lineKey
+                        ? 'text-orange-500'
+                        : 'text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400'
+                    }`}
+                  >
+                    {item.label}
+                    {activeSection === item.lineKey && (
+                      <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-orange-500 rounded-t-full" />
+                    )}
+                  </button>
+                </div>
+              ))}
+
+              <a href="https://github.com/Rachit3784" target="_blank" rel="noopener noreferrer"
+                 className="px-3 py-1.5 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors flex items-center gap-1.5 ml-2">
+                <FaGithub size={16} /> GitHub
+              </a>
+
+              <button
+                onClick={() => scrollTo('contact', 'contact')}
+                className="saas-btn-primary ml-3 !py-2.5 !px-5 !text-sm cursor-pointer">
+                Contact Me
+              </button>
+              <div className="ml-2"><ThemeToggle /></div>
+            </div>
+
+            {/* Mobile toggle */}
+            <div className="md:hidden flex items-center gap-2">
+              <ThemeToggle />
+              <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
         </div>
-      )}
-    </nav>
+
+        {/* Mobile Menu */}
+        {mobileOpen && (
+          <div className="md:hidden bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800 py-4">
+            <div className="px-4 space-y-1">
+              {NAV_ITEMS.map(item => (
+                <button
+                  key={item.lineKey}
+                  onClick={() => scrollTo(item.sectionId, item.lineKey)}
+                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
+                    activeSection === item.lineKey
+                      ? 'bg-orange-50 dark:bg-orange-950/30 text-orange-500'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}>
+                  {item.label}
+                </button>
+              ))}
+              <button
+                onClick={() => scrollTo('contact', 'contact')}
+                className="w-full mt-3 saas-btn-primary !justify-center">
+                Contact Me
+              </button>
+            </div>
+          </div>
+        )}
+      </nav>
+    </header>
   );
 };
 

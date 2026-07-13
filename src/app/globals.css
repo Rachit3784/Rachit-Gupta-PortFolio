@@ -1,23 +1,22 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
+/* =============================================
+   HIDE SCROLLBAR
+   ============================================= */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.hide-scrollbar {
-  -ms-overflow-style: none; /* IE/Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-
+/* =============================================
+   THEME TOKENS
+   ============================================= */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: 'Poppins', sans-serif;
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -123,86 +122,243 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* =============================================
+   BASE STYLES
+   ============================================= */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body::-webkit-scrollbar {
-    display: none;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+  * { @apply border-border outline-ring/50; }
 
-  html {
-    scroll-behavior: smooth;
-  }
+  body, html { font-family: 'Poppins', sans-serif; }
 
-  /* Blue focus outline for accessibility */
-  *:focus-visible {
-    outline: 2px solid rgb(37, 99, 235);
-    outline-offset: 2px;
-  }
+  body::-webkit-scrollbar { display: none; }
+  body { @apply bg-background text-foreground; }
+  html { scroll-behavior: smooth; }
 
-  .dark *:focus-visible {
-    outline: 2px solid rgb(139, 92, 246);
-    outline-offset: 2px;
-  }
+  *:focus-visible { outline: 2px solid #f97316; outline-offset: 2px; }
+  .dark *:focus-visible { outline: 2px solid #fb923c; outline-offset: 2px; }
 
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--background);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 5px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-
-  .dark ::-webkit-scrollbar-thumb {
-    background: #555;
-  }
-
-  .dark ::-webkit-scrollbar-thumb:hover {
-    background: #777;
-  }
-
-  /* Animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fadeIn {
-    animation: fadeIn 0.5s ease-out forwards;
-  }
-
-  .blinking-cursor {
-    font-weight: bold;
-    animation: blink 1s step-end infinite;
-  }
-
-  @keyframes blink {
-    50% {
-      opacity: 0;
-    }
-  }
-
-  .glow-line {
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.7);
-  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f4f5f6; }
+  ::-webkit-scrollbar-thumb { background: #f97316; border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: #ea580c; }
+  .dark ::-webkit-scrollbar-track { background: #1a1a1a; }
+  .dark ::-webkit-scrollbar-thumb { background: #f97316; }
 }
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes rotateText {
+  0%   { opacity: 0; transform: translateY(20px); }
+  15%  { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* =============================================
+   UTILITY CLASSES
+   ============================================= */
+.animate-fadeIn     { animation: fadeIn 0.5s ease-out forwards; }
+.animate-fadeInUp   { animation: fadeInUp 0.6s ease-out forwards; }
+.animate-countUp    { animation: countUp 0.5s ease-out forwards; }
+.animate-float      { animation: float 3s ease-in-out infinite; }
+.animate-spin-slow  { animation: spin-slow 8s linear infinite; }
+.blinking-cursor    { font-weight: bold; animation: blink 1s step-end infinite; }
+
+/* SaaS Button — primary orange */
+.saas-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: #f97316;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 2px solid #f97316;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.saas-btn-primary:hover {
+  background: #ea580c;
+  border-color: #ea580c;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(249,115,22,0.35);
+}
+
+/* SaaS Button — outline */
+.saas-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: transparent;
+  color: #1a1a1a;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 2px solid #1a1a1a;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.saas-btn-outline:hover {
+  background: #1a1a1a;
+  color: #fff;
+  transform: translateY(-2px);
+}
+.dark .saas-btn-outline {
+  color: #f3f4f6;
+  border-color: #4b5563;
+}
+.dark .saas-btn-outline:hover {
+  background: #374151;
+  color: #fff;
+  border-color: #374151;
+}
+
+/* SaaS Card with hover lift */
+.saas-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+}
+.saas-card:hover {
+  box-shadow: 0 16px 40px rgba(0,0,0,0.10);
+  transform: translateY(-6px);
+  border-color: #f97316;
+}
+.dark .saas-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+.dark .saas-card:hover {
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  border-color: #f97316;
+}
+
+/* Section badge pill */
+.saas-section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ea580c;
+}
+.dark .saas-section-badge {
+  background: rgba(249,115,22,0.12);
+  border-color: rgba(249,115,22,0.3);
+  color: #fb923c;
+}
+
+/* Orange underline indicator for nav */
+.nav-active-line {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #f97316;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Watermark background text */
+.watermark-text {
+  position: absolute;
+  font-size: clamp(80px, 12vw, 160px);
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0,0,0,0.05);
+  text-stroke: 1px rgba(0,0,0,0.05);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+  z-index: 0;
+}
+.dark .watermark-text {
+  -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+  text-stroke: 1px rgba(255,255,255,0.04);
+}
+
+/* Timeline orange dot */
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  background: #f97316;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 3px #f97316;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dark .timeline-dot {
+  border-color: #1e293b;
+}
+
+/* Orange gradient text */
+.gradient-orange {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Executive legacy classes kept for Chat UI */
+.executive-glow { box-shadow: 0 0 25px rgba(37,99,235,0.25); }
+.executive-card-shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.dark .executive-card-shadow { box-shadow: 0 4px 25px rgba(0,0,0,0.4); }

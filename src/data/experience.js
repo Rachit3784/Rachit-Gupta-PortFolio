@@ -1,41 +1,40 @@
 // data/experience.js
 export const experiences = [
   {
-    id: 'wecofy-internship',
-    role: 'Android Developer',
-    company: 'Wecofy',
-    type: 'Full-time',
-    duration: 'Aug 2025 - Jan 2026',
-    durationLabel: '1 yr',
-    location: 'WFH · Remote',
+    id: 'app-developer-internship',
+    role: 'Application Developer Intern',
+    company: 'Talent Acquisition Tech Platform',
+    type: 'Internship',
+    duration: 'Nov 2025 - Present',
+    durationLabel: 'Current Role',
+    location: 'Remote · WFH',
     companyLogo: '/logos/wecofy.png',
-    certificate: '/WecofyOfferLater.pdf',
+    certificate: '',
     description: [
-      'Built a Real-Time E-commerce Mobile Application using React Native.',
-      'Implemented product listing, cart management, authentication, and real-time updates.',
-      'Integrated REST APIs and optimized app performance for smooth user experience.',
-      'Applied state management and secure user authentication flow.'
+      'Developed and shipped multiple production React Native screens for a talent-acquisition app, enabling users to create profiles, showcase talent, and discover opportunities in the entertainment industry.',
+      'Implemented REST API integration and improved app responsiveness by cancelling unused requests during navigation, reducing network overhead and enhancing UX.',
+      'Designed mobile screens & clean state management with Zustand/Redux mirroring production-grade layered architecture (Controller-Service-Repository).',
+      'Optimized image loading, media uploads, and screen transitions for smooth cross-platform performance on Android and iOS.'
     ],
-    technologies: ['React Native', 'REST API', 'State Management', 'Authentication']
+    technologies: ['React Native', 'TypeScript', 'REST APIs', 'Request Cancellation (Axios/AbortController)', 'Zustand', 'Node.js']
   },
   {
-    id: 'zaalima-internship',
-    role: 'Web Developer',
-    company: 'Zaalima Technologies',
-    companyFullName: 'Zaalima Development Pvt. Ltd.',
+    id: 'fullstack-web-internship',
+    role: 'Full-Stack & Web Developer Intern',
+    company: 'Zaalima Development Pvt. Ltd.',
     type: 'Internship',
     duration: 'Mar 2026 - Jun 2026',
     durationLabel: '3 mos',
     location: 'Remote · Bangalore, India',
-    stipend: 'Up to ₹6,000/month',
     companyLogo: '/logos/zaalima.jpg',
     certificate: '/ZaalimaOfferLetter.pdf',
     description: [
-      'Developing responsive web applications using modern web technologies.',
-      'Working with MERN stack (MongoDB, Express.js, React.js, Node.js) for full-stack development.',
-      'Implementing secure authentication systems and RESTful APIs.',
-      'Collaborating with the development team on real-world projects with performance-based evaluations.'
+      'Developed responsive web applications using Next.js 16, React.js, and modern CSS/Tailwind frameworks.',
+      'Worked with MERN stack (MongoDB Atlas, Express.js, React.js, Node.js) for full-stack web feature delivery.',
+      'Implemented secure JWT single-device authentication systems and optimized RESTful API endpoints.',
+      'Collaborated directly with product teams on production deployments on Vercel and cloud platforms.'
     ],
-    technologies: ['React.js', 'Node.js', 'MongoDB', 'Express.js', 'JavaScript', 'REST API']
+    technologies: ['Next.js 16', 'React.js', 'Node.js', 'MongoDB Atlas', 'Express.js', 'TypeScript', 'REST APIs']
   }
 ];
+
