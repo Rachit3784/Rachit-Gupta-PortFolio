@@ -1,4 +1,4 @@
-// components/Contact.js — SaaS Premium Redesign
+// components/Contact.js — SaaS Premium Black & Orange
 "use client";
 import React, { useState } from 'react';
 import { FaWhatsapp, FaEnvelope, FaLinkedin, FaInstagram, FaGithub, FaPhone } from 'react-icons/fa';
@@ -115,7 +115,7 @@ const ContactForm = () => {
   };
 
   const inputBase =
-    'w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 outline-none transition-all duration-200 font-medium resize-none';
+    'w-full bg-white dark:bg-black border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 outline-none transition-all duration-200 font-medium resize-none';
 
   return (
     <form onSubmit={onSubmit} className="space-y-5">
@@ -140,7 +140,7 @@ const ContactForm = () => {
             className={`${inputBase} ${
               focused === field.id
                 ? 'border-orange-500 ring-2 ring-orange-500/20'
-                : 'hover:border-gray-300 dark:hover:border-gray-600'
+                : 'hover:border-gray-300 dark:hover:border-zinc-700'
             }`}
           />
         </div>
@@ -163,7 +163,7 @@ const ContactForm = () => {
           className={`${inputBase} ${
             focused === 'message'
               ? 'border-orange-500 ring-2 ring-orange-500/20'
-              : 'hover:border-gray-300 dark:hover:border-gray-600'
+              : 'hover:border-gray-300 dark:hover:border-zinc-700'
           }`}
         />
       </div>
@@ -214,7 +214,7 @@ const ContactForm = () => {
 
 /* ── Main Section ────────────────────────────────────── */
 const Contact = () => (
-  <section id="contact" className="py-24 bg-white dark:bg-[#0d0f1a]">
+  <section id="contact" className="py-24 bg-white dark:bg-black">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       {/* Section Header */}
@@ -251,8 +251,8 @@ const Contact = () => (
               viewport={{ once: true }}
               transition={{ delay: i * 0.07 }}
               whileHover={{ y: -6, scale: 1.03 }}
-              className="group relative flex flex-col items-center gap-3 p-5 bg-white dark:bg-gray-900
-                border border-gray-200 dark:border-gray-800 rounded-2xl
+              className="group relative flex flex-col items-center gap-3 p-5 bg-white dark:bg-[#0a0a0a]
+                border border-gray-200 dark:border-zinc-800 rounded-2xl
                 hover:border-transparent hover:shadow-xl
                 transition-all duration-300 overflow-hidden cursor-pointer text-center"
             >
@@ -299,7 +299,7 @@ const Contact = () => (
         {/* Left: Contact Form (wider) */}
         <motion.div
           initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-          className="lg:col-span-3 bg-[#f8f8f8] dark:bg-gray-900/60 rounded-2xl p-8 border border-gray-200 dark:border-gray-800"
+          className="lg:col-span-3 bg-[#fafafa] dark:bg-[#0a0a0a] rounded-2xl p-8 border border-gray-200 dark:border-zinc-800"
         >
           <div className="mb-6">
             <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-1">Send a Message</h3>
@@ -333,7 +333,7 @@ const Contact = () => (
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group flex items-start gap-4 p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl hover:border-orange-400 transition-all duration-300"
+                className="group flex items-start gap-4 p-5 bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-zinc-800 rounded-2xl hover:border-orange-400 transition-all duration-300"
               >
                 <div className="w-11 h-11 bg-orange-50 dark:bg-orange-950/30 rounded-xl flex items-center justify-center flex-shrink-0 border border-orange-100 dark:border-orange-900/40 group-hover:bg-orange-500 transition-all duration-300">
                   <Icon size={18} className="text-orange-500 group-hover:text-white transition-colors duration-300" />

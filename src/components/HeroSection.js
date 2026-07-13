@@ -56,7 +56,7 @@ const HeroSection = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center bg-white dark:bg-[#0d0f1a] overflow-hidden"
+      className="relative min-h-screen flex items-center bg-white dark:bg-black overflow-hidden"
       style={{ paddingTop: '105px' }}
     >
       {/* Watermark Background Text */}
@@ -66,7 +66,7 @@ const HeroSection = () => {
 
       {/* Soft orange gradient blob */}
       <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-orange-100/60 dark:bg-orange-900/10 rounded-full blur-[100px] pointer-events-none z-0" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-50/80 dark:bg-blue-900/10 rounded-full blur-[80px] pointer-events-none z-0" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-orange-500/5 rounded-full blur-[80px] pointer-events-none z-0" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -134,7 +134,7 @@ const HeroSection = () => {
               {STATS.map((stat, i) => (
                 <div
                   key={i}
-                  className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 text-center hover:border-orange-400 transition-colors">
+                  className="bg-[#fafafa] dark:bg-[#0a0a0a] border border-gray-200 dark:border-zinc-800 rounded-xl p-4 text-center hover:border-orange-400 transition-colors">
                   <div className="text-2xl font-black text-gray-900 dark:text-white">{stat.value}</div>
                   <div className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-0.5">{stat.label}</div>
                 </div>
@@ -149,7 +149,7 @@ const HeroSection = () => {
               <div className="absolute inset-0 rounded-full border-2 border-dashed border-orange-300/60 dark:border-orange-500/30 animate-spin-slow scale-110" />
 
               {/* Profile image */}
-              <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden ring-4 ring-white dark:ring-gray-900 shadow-2xl animate-float">
+              <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden ring-4 ring-white dark:ring-black shadow-2xl animate-float">
                 <img
                   src="/Profile.jpg"
                   alt="Rachit Gupta"
@@ -158,15 +158,15 @@ const HeroSection = () => {
               </div>
 
               {/* Floating tech badges */}
-              <div className="absolute -top-4 -left-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 px-3 py-2 flex items-center gap-2">
+              <div className="absolute -top-4 -left-8 bg-white dark:bg-black rounded-xl shadow-lg border border-gray-100 dark:border-zinc-800 px-3 py-2 flex items-center gap-2">
                 <div className="w-6 h-6 bg-orange-500 rounded-md flex items-center justify-center">
                   <Globe size={13} className="text-white" />
                 </div>
                 <span className="text-xs font-bold text-gray-900 dark:text-white">Next.js 16</span>
               </div>
 
-              <div className="absolute -bottom-4 -right-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 px-3 py-2 flex items-center gap-2">
-                <div className="w-6 h-6 bg-blue-500 rounded-md flex items-center justify-center">
+              <div className="absolute -bottom-4 -right-8 bg-white dark:bg-black rounded-xl shadow-lg border border-gray-100 dark:border-zinc-800 px-3 py-2 flex items-center gap-2">
+                <div className="w-6 h-6 bg-orange-500 rounded-md flex items-center justify-center">
                   <Smartphone size={13} className="text-white" />
                 </div>
                 <span className="text-xs font-bold text-gray-900 dark:text-white">React Native</span>
@@ -184,7 +184,7 @@ const HeroSection = () => {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
         <button
           onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })}
-          className="animate-bounce p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-full shadow-md hover:border-orange-400 transition-colors cursor-pointer">
+          className="animate-bounce p-3 bg-white dark:bg-black border border-gray-200 dark:border-zinc-800 rounded-full shadow-md hover:border-orange-400 transition-colors cursor-pointer">
           <ChevronDown className="w-5 h-5 text-gray-600 dark:text-gray-300" />
         </button>
       </div>

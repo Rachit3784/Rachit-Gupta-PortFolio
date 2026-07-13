@@ -47,7 +47,7 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 font-[Poppins]">
       {/* ── Top Contact Bar ─────────────────────────────────── */}
-      <div className="bg-[#1a1a1a] dark:bg-[#0d0d0d] text-white text-xs">
+      <div className="bg-black text-white text-xs border-b border-zinc-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-9">
           <div className="hidden md:flex items-center gap-6">
             <a href="mailto:grachit736@gmail.com"
@@ -55,7 +55,7 @@ const Navbar = () => {
               <FaEnvelope size={11} />
               grachit736@gmail.com
             </a>
-            <span className="text-gray-600">|</span>
+            <span className="text-zinc-700">|</span>
             <a href="tel:+919009634404"
                className="flex items-center gap-1.5 hover:text-orange-400 transition-colors">
               <FaPhone size={11} />
@@ -83,9 +83,9 @@ const Navbar = () => {
       {/* ── Main Navbar ─────────────────────────────────────── */}
       <nav className={`transition-all duration-300 ${
         scrolled
-          ? 'bg-white dark:bg-gray-950 shadow-md'
-          : 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm'
-      } border-b border-gray-100 dark:border-gray-800`}>
+          ? 'bg-white dark:bg-black shadow-md'
+          : 'bg-white/95 dark:bg-black/95 backdrop-blur-sm'
+      } border-b border-gray-100 dark:border-zinc-800`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 

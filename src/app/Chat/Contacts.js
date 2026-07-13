@@ -117,7 +117,7 @@ const ChatScreen = () => {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-[#0d0f1a]" style={{ fontFamily: "'Poppins', sans-serif" }}>
+    <div className="fixed inset-0 flex flex-col bg-black text-white" style={{ fontFamily: "'Poppins', sans-serif" }}>
 
       {/* Background subtle grid */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -129,17 +129,17 @@ const ChatScreen = () => {
 
       {/* Glow blobs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-orange-500/5 rounded-full blur-[100px] pointer-events-none" />
 
       {/* ── Main Container ─────────────────────────────── */}
-      <div className="relative z-10 h-full max-w-3xl mx-auto w-full flex flex-col border-x border-white/5">
+      <div className="relative z-10 h-full max-w-3xl mx-auto w-full flex flex-col border-x border-zinc-800">
 
         {/* ── Header ───────────────────────────────────── */}
-        <header className="flex-shrink-0 px-4 py-3 bg-[#111827]/90 backdrop-blur-md border-b border-white/5 flex items-center justify-between">
+        <header className="flex-shrink-0 px-4 py-3 bg-black/90 backdrop-blur-md border-b border-zinc-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               onClick={() => router.push('/')}
-              className="w-9 h-9 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center text-gray-400 hover:text-white transition-all cursor-pointer border border-white/5"
+              className="w-9 h-9 bg-zinc-900 hover:bg-zinc-800 rounded-xl flex items-center justify-center text-gray-400 hover:text-white transition-all cursor-pointer border border-zinc-800"
               title="Back to Portfolio"
             >
               <ArrowLeft size={16} />
@@ -150,7 +150,7 @@ const ChatScreen = () => {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/25">
                 <Bot className="w-5 h-5 text-white" />
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#111827]" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-black" />
             </div>
 
             <div>
@@ -166,7 +166,7 @@ const ChatScreen = () => {
 
           <button
             onClick={clearHistory}
-            className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-red-500/10 hover:border-red-500/30 text-gray-400 hover:text-red-400 rounded-xl transition-all text-xs font-semibold border border-white/5 cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-2 bg-zinc-900 hover:bg-red-500/10 hover:border-red-500/30 text-gray-400 hover:text-red-400 rounded-xl transition-all text-xs font-semibold border border-zinc-800 cursor-pointer"
             title="Clear Chat History"
           >
             <Trash2 size={13} />
@@ -175,16 +175,16 @@ const ChatScreen = () => {
         </header>
 
         {/* ── Quick Prompt Chips ────────────────────────── */}
-        <div className="flex-shrink-0 px-4 py-2.5 border-b border-white/5 bg-[#0d0f1a]/60 overflow-x-auto hide-scrollbar">
+        <div className="flex-shrink-0 px-4 py-2.5 border-b border-zinc-800 bg-black/60 overflow-x-auto hide-scrollbar">
           <div className="flex gap-2 min-w-max">
             {CHAT_CHIPS.map((chip, i) => (
               <button
                 key={i}
                 onClick={() => sendMessage(chip.prompt)}
                 className="flex-shrink-0 px-3.5 py-1.5 text-[11px] font-bold rounded-lg
-                  bg-white/5 hover:bg-orange-500/15
+                  bg-[#0a0a0a] hover:bg-orange-500/15
                   text-gray-400 hover:text-orange-400
-                  border border-white/8 hover:border-orange-500/40
+                  border border-zinc-800 hover:border-orange-500/40
                   transition-all duration-200 cursor-pointer"
               >
                 {chip.label}
@@ -215,7 +215,7 @@ const ChatScreen = () => {
                   <div
                     className={`max-w-[80%] sm:max-w-[70%] rounded-2xl px-4 py-3 ${
                       isBot
-                        ? 'bg-[#1a1f2e] border border-white/8 text-gray-200 rounded-tl-sm'
+                        ? 'bg-[#0a0a0a] border border-zinc-800 text-gray-200 rounded-tl-sm'
                         : 'bg-orange-500 text-white rounded-tr-sm shadow-lg shadow-orange-500/20'
                     }`}
                   >
@@ -247,7 +247,7 @@ const ChatScreen = () => {
                 <div className="w-8 h-8 rounded-xl bg-orange-500/15 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
                   <Bot size={14} className="text-orange-400" />
                 </div>
-                <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1f2e] border border-white/8 rounded-2xl rounded-tl-sm">
+                <div className="flex items-center gap-2 px-4 py-3 bg-[#0a0a0a] border border-zinc-800 rounded-2xl rounded-tl-sm">
                   <span className="text-[11px] font-semibold text-gray-500">Thinking</span>
                   <div className="flex gap-1">
                     {[0, 0.15, 0.3].map((delay, i) => (
@@ -267,9 +267,9 @@ const ChatScreen = () => {
         </main>
 
         {/* ── Input Bar ─────────────────────────────────── */}
-        <footer className="flex-shrink-0 p-4 bg-[#111827]/90 backdrop-blur-md border-t border-white/5">
+        <footer className="flex-shrink-0 p-4 bg-black/90 backdrop-blur-md border-t border-zinc-800">
           <div
-            className="flex items-center gap-3 bg-[#1a1f2e] border border-white/8 rounded-2xl px-4 py-2.5
+            className="flex items-center gap-3 bg-[#0a0a0a] border border-zinc-800 rounded-2xl px-4 py-2.5
               focus-within:border-orange-500/50 focus-within:shadow-lg focus-within:shadow-orange-500/10
               transition-all duration-200"
           >
@@ -289,7 +289,7 @@ const ChatScreen = () => {
               className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 cursor-pointer flex-shrink-0 ${
                 input.trim() && !isTyping
                   ? 'bg-orange-500 hover:bg-orange-600 text-white shadow-md shadow-orange-500/30 scale-100 hover:scale-105'
-                  : 'bg-white/5 text-gray-600 cursor-not-allowed'
+                  : 'bg-zinc-900 text-gray-600 cursor-not-allowed'
               }`}
             >
               <Send size={15} />

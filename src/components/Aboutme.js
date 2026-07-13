@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 const AboutMe = () => {
   return (
-    <section id="about" className="py-24 bg-white dark:bg-[#0d0f1a]">
+    <section id="about" className="py-24 bg-white dark:bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -39,7 +39,7 @@ const AboutMe = () => {
                 I&apos;m a <span className="font-extrabold text-gray-900 dark:text-white">Full-Stack Engineer (2026 Batch)</span> specializing as a <span className="font-extrabold text-orange-500">Next.js Developer</span>, <span className="font-extrabold text-gray-900 dark:text-white">React Native Developer</span>, <span className="font-extrabold text-gray-900 dark:text-white">Web Developer</span>, and <span className="font-extrabold text-gray-900 dark:text-white">App Developer</span>.
               </p>
               
-              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
                 Currently pursuing B.Tech in Computer Science Engineering at <strong>Gyan Ganga College of Technology, Jabalpur</strong> (CGPA: <strong>7.53 / 10</strong>, 2022–2026). I build live web applications on Vercel using Next.js 16 App Router & TypeScript, and architect mobile applications using React Native with clean, layered backend code (Controller-Service-Repository pattern).
               </p>
 
@@ -53,7 +53,7 @@ const AboutMe = () => {
               </div>
 
               {/* Achievement & Merit Highlight */}
-              <div className="p-4 bg-orange-50 dark:bg-orange-950/20 border border-orange-100 dark:border-orange-900/40 rounded-xl">
+              <div className="p-4 bg-[#fafafa] dark:bg-[#0a0a0a] border border-gray-200 dark:border-zinc-800 rounded-xl">
                 <p className="text-sm font-black text-gray-900 dark:text-white flex items-center gap-2">
                   🏆 Merit Scholarship: 80% Tuition Fee Waiver (TFW Award)
                 </p>
@@ -63,30 +63,30 @@ const AboutMe = () => {
               </div>
 
               {/* Core Stack */}
-              <div className="py-5 px-6 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-extrabold mb-3">
+              <div className="py-5 px-6 bg-[#fafafa] dark:bg-[#0a0a0a] rounded-2xl border border-gray-200 dark:border-zinc-800">
+                <p className="text-xs text-orange-500 uppercase tracking-wider font-extrabold mb-3">
                   Core Engineering Stack
                 </p>
                 <div className="flex flex-wrap gap-5 items-center">
-                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                    <span className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Next.js 16</span>
+                  <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                    <span className="font-extrabold text-orange-500 text-sm">Next.js 16</span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                    <FaReact className="text-blue-500 text-xl" />
+                  <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                    <FaReact className="text-orange-500 text-xl" />
                     <span className="font-extrabold text-sm">React / React Native</span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                  <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                     <SiMongodb className="text-emerald-500 text-xl" />
                     <span className="font-extrabold text-sm">MongoDB Atlas</span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                  <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                     <SiNodedotjs className="text-emerald-600 text-xl" />
                     <span className="font-extrabold text-sm">Node.js / Express</span>
                   </div>
                 </div>
               </div>
 
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
                 With hands-on experience in <strong>TypeScript</strong>, <strong>Zustand</strong>, <strong>WebRTC</strong>, <strong>Firebase</strong>, <strong>Razorpay</strong>, and <strong>JWT Auth</strong>, I am ready to collaborate directly with founders to ship scalable features and optimize REST APIs from day one.
               </p>
             </div>

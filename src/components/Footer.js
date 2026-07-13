@@ -28,7 +28,7 @@ const Footer = () => {
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <footer className="bg-[#1a1a1a] dark:bg-[#0d0d0d] text-white font-[Poppins]">
+    <footer className="bg-black text-white font-[Poppins] border-t border-zinc-800">
 
       {/* CTA Banner */}
       <div className="bg-orange-500">
@@ -74,7 +74,7 @@ const Footer = () => {
                 { href: 'mailto:grachit736@gmail.com',                            icon: <FaEnvelope size={16} /> },
               ].map((s, i) => (
                 <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
-                   className="w-9 h-9 bg-gray-800 hover:bg-orange-500 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300">
+                   className="w-9 h-9 bg-[#0a0a0a] border border-zinc-800 hover:bg-orange-500 hover:border-orange-500 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300">
                   {s.icon}
                 </a>
               ))}
@@ -84,7 +84,7 @@ const Footer = () => {
           {/* Column 2: Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-            <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-5 pb-3 border-b border-gray-800">
+            <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-5 pb-3 border-b border-zinc-800">
               Quick Links
             </h4>
             <ul className="space-y-2.5">
@@ -104,7 +104,7 @@ const Footer = () => {
           {/* Column 3: Services */}
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
-            <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-5 pb-3 border-b border-gray-800">
+            <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-5 pb-3 border-b border-zinc-800">
               Services
             </h4>
             <ul className="space-y-2.5">
@@ -120,7 +120,7 @@ const Footer = () => {
           {/* Column 4: Contact Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
-            <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-5 pb-3 border-b border-gray-800">
+            <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-5 pb-3 border-b border-zinc-800">
               Contact
             </h4>
             <div className="space-y-4">
@@ -150,7 +150,7 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom Bar */}
-      <div className="border-t border-gray-800">
+      <div className="border-t border-zinc-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-500">
             © {year} Rachit Gupta. All rights reserved.
