@@ -8,7 +8,7 @@ export async function POST(request) {
     if (!message) {
       return NextResponse.json(
         { error: 'Information is required' },
-        { status: 400 }
+        { status: 400}
       );
     }
 
