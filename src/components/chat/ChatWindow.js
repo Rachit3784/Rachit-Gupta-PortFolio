@@ -303,8 +303,8 @@ const ChatWindow = ({ user, onLogout }) => {
       </div>
 
       {/* Input area */}
-      <div className="flex-shrink-0 relative z-10 border-t border-white/[0.06] bg-white/[0.02] backdrop-blur-2xl px-4 py-3">
-        <div className="max-w-4xl mx-auto space-y-2">
+      <div className="flex-shrink-0 relative z-10 border-t border-white/[0.06] bg-white/[0.02] backdrop-blur-2xl px-2 sm:px-4 py-2 sm:py-3 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
+        <div className="max-w-4xl mx-auto space-y-1.5 sm:space-y-2 w-full">
 
           {/* File preview bar */}
           <AnimatePresence>
@@ -313,19 +313,19 @@ const ChatWindow = ({ user, onLogout }) => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10"
+                className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10"
               >
                 {selectedFile.type === 'image' && selectedFile.preview ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={selectedFile.preview} alt="" className="w-12 h-12 rounded-xl object-cover flex-shrink-0" />
+                  <img src={selectedFile.preview} alt="" className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl object-cover flex-shrink-0" />
                 ) : (
-                  <div className="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0">
-                    <FileText size={20} className="text-red-400" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                    <FileText size={18} className="text-red-400" />
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-white font-medium truncate">{selectedFile.name}</p>
-                  <p className="text-xs text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB · {selectedFile.type.toUpperCase()}</p>
+                  <p className="text-xs sm:text-sm text-white font-medium truncate">{selectedFile.name}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB · {selectedFile.type.toUpperCase()}</p>
                 </div>
                 <button onClick={removeFile} className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
                   <X size={14} />
@@ -338,7 +338,7 @@ const ChatWindow = ({ user, onLogout }) => {
           <AnimatePresence>
             {fileError && (
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="text-xs text-red-400 font-medium px-1"
+                className="text-[11px] sm:text-xs text-red-400 font-medium px-1"
               >
                 ⚠ {fileError}
               </motion.p>
@@ -346,17 +346,17 @@ const ChatWindow = ({ user, onLogout }) => {
           </AnimatePresence>
 
           {/* Input row */}
-          <form onSubmit={handleSend} className="flex items-end gap-2">
+          <form onSubmit={handleSend} className="flex items-end gap-1.5 sm:gap-2 w-full">
 
             {/* Attachment button */}
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
               disabled={sending}
-              className="flex-shrink-0 w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-orange-400 hover:border-orange-500/30 hover:bg-orange-500/5 transition-all cursor-pointer disabled:opacity-40"
+              className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-orange-400 hover:border-orange-500/30 hover:bg-orange-500/5 transition-all cursor-pointer disabled:opacity-40"
               title="Attach image or PDF"
             >
-              <Paperclip size={17} />
+              <Paperclip size={16} />
             </button>
             <input
               ref={fileRef}
@@ -367,7 +367,7 @@ const ChatWindow = ({ user, onLogout }) => {
             />
 
             {/* Text input */}
-            <div className="flex-1 relative">
+            <div className="flex-1 relative min-w-0">
               <textarea
                 ref={inputRef}
                 rows={1}
@@ -376,8 +376,8 @@ const ChatWindow = ({ user, onLogout }) => {
                 onKeyDown={handleKeyDown}
                 placeholder="Type a message..."
                 disabled={sending}
-                className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 focus:border-orange-500/40 focus:bg-white/8 text-sm text-white placeholder-gray-500 outline-none transition-all resize-none leading-relaxed disabled:opacity-50 font-medium"
-                style={{ maxHeight: '120px', overflowY: 'auto' }}
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 focus:border-orange-500/40 focus:bg-white/8 text-xs sm:text-sm text-white placeholder-gray-500 outline-none transition-all resize-none leading-relaxed disabled:opacity-50 font-medium box-border"
+                style={{ maxHeight: '100px', overflowY: 'auto' }}
               />
             </div>
 
@@ -387,17 +387,17 @@ const ChatWindow = ({ user, onLogout }) => {
               disabled={sending || (!inputText.trim() && !selectedFile)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex-shrink-0 w-10 h-10 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white shadow-lg shadow-orange-500/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+              className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white shadow-lg shadow-orange-500/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
             >
               {sending
-                ? <Loader2 size={17} className="animate-spin" />
-                : <Send size={17} className="ml-0.5" />
+                ? <Loader2 size={16} className="animate-spin" />
+                : <Send size={16} className="ml-0.5" />
               }
             </motion.button>
           </form>
 
-          <p className="text-center text-[10px] text-gray-600">
-            Press <kbd className="px-1 py-0.5 rounded bg-white/5 text-gray-500 text-[9px] font-mono">Enter</kbd> to send · <kbd className="px-1 py-0.5 rounded bg-white/5 text-gray-500 text-[9px] font-mono">Shift+Enter</kbd> for new line
+          <p className="text-center text-[9px] sm:text-[10px] text-gray-600">
+            Press <kbd className="px-1 py-0.5 rounded bg-white/5 text-gray-500 text-[8px] sm:text-[9px] font-mono">Enter</kbd> to send · <kbd className="px-1 py-0.5 rounded bg-white/5 text-gray-500 text-[8px] sm:text-[9px] font-mono">Shift+Enter</kbd> for new line
           </p>
         </div>
       </div>

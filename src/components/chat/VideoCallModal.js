@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mic, MicOff, Video, VideoOff, PhoneOff, Maximize2, Minimize2, Shield, User } from 'lucide-react';
 import { startRingtoneSound, stopRingtoneSound } from '@/utils/audioUtils';
+import { socket } from '@/lib/socket';
 
 const ICE_SERVERS = {
   iceServers: [

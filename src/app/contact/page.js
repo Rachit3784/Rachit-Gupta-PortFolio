@@ -67,8 +67,8 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="h-screen w-screen bg-[#030303] flex overflow-hidden">
-      <div className="w-full h-full flex-1">
+    <main className="h-[100dvh] w-full max-w-full bg-[#030303] flex flex-col overflow-hidden relative">
+      <div className="w-full h-full flex-1 flex flex-col overflow-hidden">
         <ChatWindow user={user} onLogout={handleLogout} />
       </div>
     </main>
