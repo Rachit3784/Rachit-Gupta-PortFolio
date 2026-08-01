@@ -3,6 +3,7 @@
 import React from 'react';
 import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaPhone } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { ArrowRight, MapPin } from 'lucide-react';
 
 const QUICK_LINKS = [
@@ -11,7 +12,7 @@ const QUICK_LINKS = [
   { label: 'Projects',   id: 'projects'   },
   { label: 'Experience', id: 'experience' },
   { label: 'About Me',   id: 'about'      },
-  { label: 'Contact',    id: 'contact'    },
+  { label: 'Contact',    href: '/contact' },
 ];
 
 const SERVICES_LIST = [
@@ -39,11 +40,11 @@ const Footer = () => {
               Let's build something great together — get in touch today!
             </p>
           </div>
-          <button
-            onClick={() => scrollTo('contact')}
+          <Link
+            href="/contact"
             className="flex items-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 text-orange-600 font-bold rounded-lg transition-all hover:shadow-lg whitespace-nowrap cursor-pointer">
             Get In Touch <ArrowRight size={16} />
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -88,14 +89,23 @@ const Footer = () => {
               Quick Links
             </h4>
             <ul className="space-y-2.5">
-              {QUICK_LINKS.map(link => (
-                <li key={link.id}>
-                  <button
-                    onClick={() => scrollTo(link.id)}
-                    className="text-sm text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2 group cursor-pointer">
-                    <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity text-orange-500" />
-                    {link.label}
-                  </button>
+              {QUICK_LINKS.map((link, i) => (
+                <li key={i}>
+                  {link.href ? (
+                    <Link
+                      href={link.href}
+                      className="text-sm text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2 group cursor-pointer">
+                      <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity text-orange-500" />
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => scrollTo(link.id)}
+                      className="text-sm text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2 group cursor-pointer">
+                      <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity text-orange-500" />
+                      {link.label}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>

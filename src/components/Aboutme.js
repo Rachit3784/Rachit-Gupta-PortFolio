@@ -7,6 +7,7 @@ import {
 } from 'react-icons/si';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Trophy, GraduationCap, Code2, Heart, MapPin, Calendar, Star, ArrowUpRight } from 'lucide-react';
 
 /* ── Role badges ── */
@@ -105,14 +106,12 @@ const AboutMe = () => {
 
             {/* CTAs */}
             <div className="flex flex-col gap-3 w-full max-w-xs">
-              <motion.a
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                href="#contact"
+              <Link
+                href="/contact"
                 className="btn-primary justify-center"
               >
                 Get in Touch
-              </motion.a>
+              </Link>
               <motion.a
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}

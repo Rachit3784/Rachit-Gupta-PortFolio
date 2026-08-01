@@ -5,11 +5,9 @@ import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import Services from '../components/Services';
 import Projects from '../components/Projects';
-import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import Experience from '../components/Experience';
 import AboutMe from '@/components/Aboutme';
-
 
 export default function Home() {
   useEffect(() => {
@@ -32,8 +30,7 @@ export default function Home() {
       <Projects />
       <Experience />
       <AboutMe />
-      <Contact />
       <Footer />
     </main>
   );
-}
+}

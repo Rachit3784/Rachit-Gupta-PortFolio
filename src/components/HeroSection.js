@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, ChevronDown, Github, Linkedin, Zap, Code2, Smartphone, Globe } from 'lucide-react';
 import FloatingActionButton from './FloatingActionButton';
 import Image from 'next/image';
+import Link from 'next/link';
 
 /* ── Rotating words ── */
 const ROLES = ['Next.js Developer', 'React Native Dev', 'Full-Stack Engineer', 'Web Developer', 'App Developer'];
@@ -183,14 +184,9 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <motion.div variants={itemVariants} className="flex flex-wrap gap-3 mb-10">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="btn-primary"
-              >
+              <Link href="/contact" className="btn-primary">
                 Hire Me Now <ArrowRight size={16} />
-              </motion.button>
+              </Link>
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}

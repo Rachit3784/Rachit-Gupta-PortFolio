@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { label: 'Projects',   sectionId: 'projects',   key: 'projects'   },
   { label: 'Experience', sectionId: 'experience', key: 'experience' },
   { label: 'About',      sectionId: 'about',      key: 'aboutme'    },
+  // { label: 'Contact',    href: '/contact',        key: 'contact'    },
 ];
 
 const Navbar = () => {
@@ -27,6 +28,7 @@ const Navbar = () => {
       setScrolled(window.scrollY > 60);
       let maxH = 0, active = 'home';
       NAV_ITEMS.forEach(({ sectionId, key }) => {
+        if (!sectionId) return;
         const el = document.getElementById(sectionId);
         if (!el) return;
         const rect = el.getBoundingClientRect();
@@ -79,24 +81,34 @@ const Navbar = () => {
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1 flex-1">
             {NAV_ITEMS.map(item => (
-              <button
-                key={item.key}
-                onClick={() => scrollTo(item.sectionId)}
-                className={`relative px-3.5 py-2 text-xs font-semibold rounded-full transition-all duration-200 cursor-pointer ${
-                  activeSection === item.key
-                    ? 'text-orange-500 bg-orange-50 dark:bg-orange-500/10'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
-                }`}
-              >
-                {item.label}
-                {activeSection === item.key && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    className="absolute inset-0 bg-orange-50 dark:bg-orange-500/10 rounded-full -z-10"
-                    transition={{ type: 'spring', stiffness: 500, damping: 40 }}
-                  />
-                )}
-              </button>
+              item.href ? (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  className="relative px-3.5 py-2 text-xs font-semibold rounded-full text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-200"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.key}
+                  onClick={() => scrollTo(item.sectionId)}
+                  className={`relative px-3.5 py-2 text-xs font-semibold rounded-full transition-all duration-200 cursor-pointer ${
+                    activeSection === item.key
+                      ? 'text-orange-500 bg-orange-50 dark:bg-orange-500/10'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                  }`}
+                >
+                  {item.label}
+                  {activeSection === item.key && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 bg-orange-50 dark:bg-orange-500/10 rounded-full -z-10"
+                      transition={{ type: 'spring', stiffness: 500, damping: 40 }}
+                    />
+                  )}
+                </button>
+              )
             ))}
           </div>
 
@@ -119,12 +131,12 @@ const Navbar = () => {
               <FaLinkedin size={15} />
             </a>
             <ThemeToggle />
-            <button
-              onClick={() => scrollTo('contact')}
+            <Link
+              href="/contact"
               className="hidden md:inline-flex btn-primary !py-2 !px-5 !text-xs !rounded-full"
             >
               Hire Me <ChevronRight size={13} />
-            </button>
+            </Link>
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -163,30 +175,43 @@ const Navbar = () => {
             >
               <div className="space-y-1">
                 {NAV_ITEMS.map((item, i) => (
-                  <motion.button
-                    key={item.key}
-                    initial={{ opacity: 0, x: -15 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    onClick={() => scrollTo(item.sectionId)}
-                    className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer flex items-center justify-between ${
-                      activeSection === item.key
-                        ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-500'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5'
-                    }`}
-                  >
-                    {item.label}
-                    <ChevronRight size={14} className="text-gray-400" />
-                  </motion.button>
+                  item.href ? (
+                    <Link
+                      key={item.key}
+                      href={item.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer flex items-center justify-between text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5"
+                    >
+                      {item.label}
+                      <ChevronRight size={14} className="text-gray-400" />
+                    </Link>
+                  ) : (
+                    <motion.button
+                      key={item.key}
+                      initial={{ opacity: 0, x: -15 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      onClick={() => scrollTo(item.sectionId)}
+                      className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer flex items-center justify-between ${
+                        activeSection === item.key
+                          ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-500'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5'
+                      }`}
+                    >
+                      {item.label}
+                      <ChevronRight size={14} className="text-gray-400" />
+                    </motion.button>
+                  )
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-black/5 dark:border-white/5 flex items-center gap-3">
-                <button
-                  onClick={() => scrollTo('contact')}
+                <Link
+                  href="/contact"
+                  onClick={() => setMobileOpen(false)}
                   className="flex-1 btn-primary !py-2.5 !text-sm justify-center"
                 >
                   Hire Me
-                </button>
+                </Link>
                 <a href="https://github.com/Rachit3784" target="_blank" rel="noopener noreferrer"
                   className="w-10 h-10 flex items-center justify-center rounded-xl bg-black/5 dark:bg-white/5 text-gray-700 dark:text-gray-300"
                 >
