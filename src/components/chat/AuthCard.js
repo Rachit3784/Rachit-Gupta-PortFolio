@@ -5,6 +5,16 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Loader2, Mail, User, MessageCircle } from 'lucide-react';
 
+export const getDeviceId = () => {
+  if (typeof window === 'undefined') return 'server_side';
+  let devId = localStorage.getItem('rachit_device_id');
+  if (!devId) {
+    devId = 'dev_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+    localStorage.setItem('rachit_device_id', devId);
+  }
+  return devId;
+};
+
 const AuthCard = ({ onAuthenticated }) => {
   const [email,       setEmail]       = useState('');
   const [name,        setName]        = useState('');
@@ -22,11 +32,20 @@ const AuthCard = ({ onAuthenticated }) => {
     if (!isValidEmail(email)) { setError('Please enter a valid email address'); return; }
     setError('');
     setLoading(true);
+
+    // Request notification permission on login attempt
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+      try { await Notification.requestPermission(); } catch {}
+    }
+
+    const deviceId = getDeviceId();
+    const notificationId = `notif_${deviceId}`;
+
     try {
       const res  = await fetch('/api/auth/check-user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, deviceId, notificationId }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Something went wrong'); return; }
@@ -51,11 +70,15 @@ const AuthCard = ({ onAuthenticated }) => {
     if (name.trim().length < 2) { setError('Please enter your full name'); return; }
     setError('');
     setLoading(true);
+
+    const deviceId = getDeviceId();
+    const notificationId = `notif_${deviceId}`;
+
     try {
       const res  = await fetch('/api/auth/check-user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name: name.trim(), create: true }),
+        body: JSON.stringify({ email, name: name.trim(), create: true, deviceId, notificationId }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Something went wrong'); return; }

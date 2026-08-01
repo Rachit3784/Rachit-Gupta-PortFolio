@@ -10,7 +10,7 @@ export async function POST(req) {
   try {
     await connectDB();
     const body = await req.json();
-    const { email, name, create } = body;
+    const { email, name, create, deviceId, notificationId } = body;
 
     if (!email || typeof email !== 'string') {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
@@ -32,18 +32,28 @@ export async function POST(req) {
         return NextResponse.json({ error: 'Name must be at least 2 characters' }, { status: 400 });
       }
       // Check again to prevent race condition
-      const existing = await ChatUser.findOne({ email: normalizedEmail });
+      let existing = await ChatUser.findOne({ email: normalizedEmail });
       if (existing) {
+        existing.activeDeviceId = deviceId || existing.activeDeviceId;
+        existing.notificationId = notificationId || existing.notificationId;
+        existing.lastActive = new Date();
+        await existing.save();
         return setAuthCookieAndReturn(existing);
       }
-      const user = await ChatUser.create({ email: normalizedEmail, name: name.trim() });
+      const user = await ChatUser.create({
+        email: normalizedEmail,
+        name: name.trim(),
+        activeDeviceId: deviceId || null,
+        notificationId: notificationId || null,
+      });
       return setAuthCookieAndReturn(user);
     }
 
     /* ── Check existing user ── */
     const user = await ChatUser.findOne({ email: normalizedEmail });
     if (user) {
-      // Update last active
+      user.activeDeviceId = deviceId || user.activeDeviceId;
+      user.notificationId = notificationId || user.notificationId;
       user.lastActive = new Date();
       await user.save();
       return setAuthCookieAndReturn(user);
@@ -62,7 +72,13 @@ function setAuthCookieAndReturn(user) {
   const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name });
   const res   = NextResponse.json({
     exists: true,
-    user: { id: user._id, name: user.name, email: user.email },
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      activeDeviceId: user.activeDeviceId,
+      notificationId: user.notificationId,
+    },
   });
   res.cookies.set(COOKIE_NAME, token, getCookieOptions());
   return res;

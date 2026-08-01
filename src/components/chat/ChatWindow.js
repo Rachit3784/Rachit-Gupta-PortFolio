@@ -8,10 +8,12 @@ import ChatHeader     from './ChatHeader';
 import MessageBubble  from './MessageBubble';
 import VideoCallModal from './VideoCallModal';
 import { socket }     from '@/lib/socket';
+import { getDeviceId } from './AuthCard';
+import { playMessageSound } from '@/utils/audioUtils';
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
-const ChatWindow = ({ user }) => {
+const ChatWindow = ({ user, onLogout }) => {
   const [messages,       setMessages]       = useState([]);
   const [inputText,      setInputText]      = useState('');
   const [selectedFile,    setSelectedFile]   = useState(null);
@@ -47,11 +49,26 @@ const ChatWindow = ({ user }) => {
       }
     }
 
+    const deviceId = getDeviceId();
+    const notificationId = `notif_${deviceId}`;
+
     socket.connect();
-    socket.emit('join_room', { userId: user.id });
+    socket.emit('join_room', { userId: user.id, deviceId, notificationId });
+
+    // Single active device session invalidation
+    socket.on('session_invalidated', (data) => {
+      console.warn('Session invalidated:', data);
+      alert(data.message || 'Aapka account dusre browser/device par open hua hai. Purana session clear kar diya gaya hai.');
+      if (onLogout) {
+        onLogout();
+      } else {
+        if (typeof window !== 'undefined') window.location.reload();
+      }
+    });
 
     // Live admin reply via Socket.io
     socket.on('admin_reply', (msg) => {
+      playMessageSound();
       setMessages((prev) => {
         if (prev.some((m) => m._id?.toString() === msg._id?.toString())) return prev;
         const updated = [...prev, msg];
@@ -76,11 +93,12 @@ const ChatWindow = ({ user }) => {
     });
 
     return () => {
+      socket.off('session_invalidated');
       socket.off('admin_reply');
       socket.off('incoming_call');
       socket.disconnect();
     };
-  }, [user, scrollToBottom]);
+  }, [user, scrollToBottom, onLogout]);
 
   /* ── Load history ── */
   useEffect(() => {
@@ -239,6 +257,7 @@ const ChatWindow = ({ user }) => {
       <ChatHeader
         user={user}
         onStartVideoCall={() => { setIsIncomingCall(false); setVideoModalOpen(true); }}
+        onLogout={onLogout}
       />
 
       {/* Messages area */}

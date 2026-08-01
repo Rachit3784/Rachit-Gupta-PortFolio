@@ -30,6 +30,25 @@ export default function ContactPage() {
     setUser(userData);
   };
 
+  const handleLogout = async () => {
+    if (user?.email) {
+      try {
+        const deviceId = typeof window !== 'undefined' ? localStorage.getItem('rachit_device_id') : null;
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: user.email, deviceId }),
+        });
+      } catch (e) {
+        console.error('Logout request error', e);
+      }
+    }
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('rachit_portfolio_chat_history');
+    }
+    setUser(null);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#030303] flex flex-col items-center justify-center gap-3">
@@ -50,7 +69,7 @@ export default function ContactPage() {
   return (
     <main className="h-screen w-screen bg-[#030303] flex overflow-hidden">
       <div className="w-full h-full flex-1">
-        <ChatWindow user={user} />
+        <ChatWindow user={user} onLogout={handleLogout} />
       </div>
     </main>
   );

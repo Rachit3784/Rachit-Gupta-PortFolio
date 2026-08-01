@@ -2,10 +2,10 @@
 // src/components/chat/ChatHeader.js — macOS Style Glass Header
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, AlertTriangle, ChevronLeft, Video } from 'lucide-react';
+import { MessageCircle, AlertTriangle, ChevronLeft, Video, LogOut } from 'lucide-react';
 import Link from 'next/link';
 
-const ChatHeader = ({ user, isOnline = true, onStartVideoCall }) => {
+const ChatHeader = ({ user, isOnline = true, onStartVideoCall, onLogout }) => {
   const initials = user.name
     .split(' ')
     .map((w) => w[0])
@@ -54,11 +54,22 @@ const ChatHeader = ({ user, isOnline = true, onStartVideoCall }) => {
           </button>
         )}
 
+        {/* Logout / Switch Account Button */}
+        {onLogout && (
+          <button
+            onClick={onLogout}
+            className="w-9 h-9 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-red-500/20 hover:text-red-400 border border-white/10 text-gray-400 transition-all cursor-pointer flex-shrink-0"
+            title="Logout / Switch Account"
+          >
+            <LogOut size={16} />
+          </button>
+        )}
+
         {/* Status badge */}
         <motion.div
           animate={{ opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest flex-shrink-0"
+          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest flex-shrink-0"
         >
           <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
           Live
