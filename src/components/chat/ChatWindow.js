@@ -43,6 +43,10 @@ const ChatWindow = ({ user, onLogout }) => {
   useEffect(() => {
     if (!user) return;
 
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+
     if (typeof window !== 'undefined' && 'Notification' in window) {
       if (Notification.permission === 'default') {
         Notification.requestPermission();
@@ -83,11 +87,28 @@ const ChatWindow = ({ user, onLogout }) => {
       setIncomingSignal(signal);
       setVideoModalOpen(true);
 
-      // Trigger OS/Browser Native Notification
-      if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+      // Trigger OS / Service Worker Background Notification
+      if (typeof window !== 'undefined' && 'serviceWorker' in navigator && Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then((reg) => {
+          reg.showNotification('📹 Incoming WebRTC Video Call', {
+            body: `${name || 'Super Admin'} is calling you... Tap to answer.`,
+            icon: '/Profile.jpg',
+            vibrate: [400, 200, 400, 200, 400],
+            tag: 'incoming-call',
+            renotify: true,
+            requireInteraction: true,
+            data: { url: '/contact' },
+          });
+        }).catch(() => {
+          new Notification('📹 Incoming WebRTC Video Call', {
+            body: `${name || 'Super Admin'} is calling you...`,
+            icon: '/Profile.jpg',
+          });
+        });
+      } else if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
         new Notification('📹 Incoming WebRTC Video Call', {
-          body: 'Rachit Gupta (Super Admin) is calling you on WebRTC Video Meeting...',
-          icon: '/favicon.ico',
+          body: `${name || 'Super Admin'} is calling you...`,
+          icon: '/Profile.jpg',
         });
       }
     });
