@@ -13,7 +13,6 @@ import AboutMe from '@/components/Aboutme';
 
 export default function Home() {
   useEffect(() => {
-    
     // Check for saved theme or system preference
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -26,14 +25,14 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <main className="min-h-screen bg-[#fafafa] dark:bg-[#030303] text-gray-900 dark:text-white">
       <Navbar />
       <HeroSection />
-      <Experience />
       <Services />
       <Projects />
+      <Experience />
+      <AboutMe />
       <Contact />
-      <AboutMe/>
       <Footer />
     </main>
   );

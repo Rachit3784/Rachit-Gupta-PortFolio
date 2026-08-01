@@ -1,193 +1,336 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
-import { ChevronDown, ArrowRight, Briefcase, Globe, Smartphone } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowRight, ChevronDown, Github, Linkedin, Zap, Code2, Smartphone, Globe } from 'lucide-react';
 import FloatingActionButton from './FloatingActionButton';
+import Image from 'next/image';
 
-/* Rotating dynamic tagline words (Conative-style) */
-const TAGLINES = ['Next.js 16', 'React Native', 'TypeScript', 'MongoDB', 'Full-Stack'];
+/* ── Rotating words ── */
+const ROLES = ['Next.js Developer', 'React Native Dev', 'Full-Stack Engineer', 'Web Developer', 'App Developer'];
 
-/* Stats for the counter bar */
+/* ── Stats ── */
 const STATS = [
-  { value: '5+',  label: 'Live Projects',     icon: Globe },
-  { value: '2',   label: 'Companies Worked',  icon: Briefcase },
-  { value: '2+',  label: 'Years Coding',      icon: null },
-  { value: '100%',label: 'On Vercel',         icon: null },
+  { value: '5+',   label: 'Live Projects'    },
+  { value: '2',    label: 'Companies'        },
+  { value: '2+',   label: 'Years Coding'     },
+  { value: '100%', label: 'On Vercel'        },
 ];
 
-const HeroSection = () => {
-  const typedRef  = useRef(null);
-  const typedInst = useRef(null);
-  const [loaded,  setLoaded]  = useState(false);
-  const [tagIdx,  setTagIdx]  = useState(0);
+/* ── Floating orbit tech badges ── */
+const ORBIT_TECHS = [
+  { label: 'Next.js',   icon: '▲', color: '#000', bg: '#fff',     angle: 0   },
+  { label: 'React',     icon: '⚛',  color: '#61DAFB', bg: '#0d1117', angle: 90  },
+  { label: 'TypeScript',icon: 'TS', color: '#fff', bg: '#3178C6', angle: 180 },
+  { label: 'Node.js',   icon: '⬡',  color: '#fff', bg: '#339933', angle: 270 },
+];
+
+/* ── Container variant ── */
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
+const itemVariants = {
+  hidden:  { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+};
+
+/* ── Rotating word component ── */
+const RotatingRole = () => {
+  const [idx, setIdx] = useState(0);
   const [visible, setVisible] = useState(true);
 
-  /* Typed.js */
   useEffect(() => {
-    if (document.querySelector('script[src*="typed.js"]')) { setLoaded(true); return; }
-    const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/typed.js@2.0.12';
-    s.async = true;
-    s.onload = () => setLoaded(true);
-    document.head.appendChild(s);
-  }, []);
-
-  useEffect(() => {
-    if (loaded && typedRef.current && window.Typed) {
-      typedInst.current = new window.Typed(typedRef.current, {
-        strings: ['Next.js Developer', 'React Native Developer', 'Full-Stack Engineer', 'Web Developer', 'App Developer'],
-        typeSpeed: 35, backSpeed: 25, backDelay: 1500, loop: true,
-      });
-      return () => typedInst.current?.destroy();
-    }
-  }, [loaded]);
-
-  /* Rotating tagline animation */
-  useEffect(() => {
-    const interval = setInterval(() => {
+    const t = setInterval(() => {
       setVisible(false);
       setTimeout(() => {
-        setTagIdx(i => (i + 1) % TAGLINES.length);
+        setIdx(i => (i + 1) % ROLES.length);
         setVisible(true);
-      }, 400);
-    }, 2200);
-    return () => clearInterval(interval);
+      }, 350);
+    }, 2500);
+    return () => clearInterval(t);
   }, []);
+
+  return (
+    <span
+      style={{ transition: 'opacity 0.35s, transform 0.35s' }}
+      className={`gradient-orange font-display font-extrabold ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'}`}
+    >
+      {ROLES[idx]}
+    </span>
+  );
+};
+
+/* ── Orbit ring component ── */
+const OrbitBadge = ({ tech, delay = 0 }) => (
+  <motion.div
+    className="absolute"
+    style={{
+      top: '50%', left: '50%',
+      transformOrigin: '0 0',
+    }}
+    animate={{ rotate: [tech.angle, tech.angle + 360] }}
+    transition={{ duration: 18, ease: 'linear', repeat: Infinity, delay }}
+  >
+    <div
+      style={{ transform: `translateX(130px) translateY(-50%)`, transformOrigin: 'left center' }}
+    >
+      <motion.div
+        animate={{ rotate: [-(tech.angle), -(tech.angle + 360)] }}
+        transition={{ duration: 18, ease: 'linear', repeat: Infinity, delay }}
+        className="w-11 h-11 rounded-xl flex items-center justify-center text-xs font-black shadow-lg shadow-black/20 border border-white/10"
+        style={{ background: tech.bg, color: tech.color, fontSize: tech.label === 'TypeScript' ? '9px' : '16px' }}
+        title={tech.label}
+      >
+        {tech.icon}
+      </motion.div>
+    </div>
+  </motion.div>
+);
+
+/* ── Main HeroSection ── */
+const HeroSection = () => {
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, -80]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center bg-white dark:bg-black overflow-hidden"
-      style={{ paddingTop: '105px' }}
+      className="relative min-h-screen flex items-center bg-white dark:bg-[#030303] overflow-hidden"
+      style={{ paddingTop: '100px' }}
     >
-      {/* Watermark Background Text */}
-      <span className="watermark-text select-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute">
+      {/* Background glows */}
+      <div className="hero-glow-1 dark:opacity-70" />
+      <div className="hero-glow-2 dark:opacity-50" />
+      <div className="hero-glow-3 dark:opacity-40" />
+
+      {/* Grid lines overlay */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }}
+      />
+      <div className="dark:block hidden absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }}
+      />
+
+      {/* Watermark */}
+      <span className="watermark-text select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         RACHIT
       </span>
 
-      {/* Soft orange gradient blob */}
-      <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-orange-100/60 dark:bg-orange-900/10 rounded-full blur-[100px] pointer-events-none z-0" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-orange-500/5 rounded-full blur-[80px] pointer-events-none z-0" />
+      {/* ── Content ── */}
+      <motion.div
+        style={{ y: y1 }}
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-          {/* ── Left: Text Content ────────────────────────────── */}
-          <div className="order-2 lg:order-1">
-            {/* Availability Badge */}
-            <div className="saas-section-badge mb-5 w-fit">
-              <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-              Available For Hire · 2026 Batch
-            </div>
+          {/* ── Left: Text ── */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="order-2 lg:order-1"
+          >
+            {/* Availability badge */}
+            <motion.div variants={itemVariants} className="mb-6 w-fit">
+              <div className="section-badge">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                </span>
+                Available · 2026 Batch · Open to Hire
+              </div>
+            </motion.div>
 
             {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white leading-tight mb-3 tracking-tight">
+            <motion.h1
+              variants={itemVariants}
+              className="text-5xl sm:text-6xl lg:text-7xl font-display font-extrabold text-gray-900 dark:text-white leading-[1.05] mb-4 tracking-tight"
+            >
               Hi, I'm{' '}
-              <span className="gradient-orange">Rachit Gupta</span>
-            </h1>
+              <span className="gradient-orange">Rachit</span>
+              <br />
+              <span className="text-gray-900 dark:text-white">Gupta</span>
+            </motion.h1>
 
-            {/* Rotating tagline — Conative style */}
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-xl sm:text-2xl font-bold text-gray-500 dark:text-gray-400">Expert in</span>
-              <span
-                className={`text-xl sm:text-2xl font-black text-orange-500 transition-all duration-400 ${
-                  visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
-                }`}
-                style={{ minWidth: '200px', display: 'inline-block', transition: 'opacity 0.35s ease, transform 0.35s ease' }}
-              >
-                {TAGLINES[tagIdx]}
+            {/* Rotating role */}
+            <motion.div variants={itemVariants} className="flex items-center gap-3 mb-5 min-h-[36px]">
+              <span className="text-lg sm:text-xl font-semibold text-gray-500 dark:text-gray-400">
+                Expert in
               </span>
-            </div>
+              <div style={{ minWidth: '240px' }}>
+                <RotatingRole />
+              </div>
+            </motion.div>
 
-            {/* Typed.js subtitle */}
-            <div className="text-lg sm:text-xl font-semibold text-gray-600 dark:text-gray-300 mb-5">
-              Specializing as{' '}
-              <span ref={typedRef} className="text-orange-500 font-bold">
-                {!loaded && 'Next.js Developer'}
-              </span>
-            </div>
-
-            <p className="text-base text-gray-600 dark:text-gray-400 mb-8 max-w-lg leading-relaxed">
-              Full-Stack Engineer (2026 Batch) with hands-on internship experience building and deploying 
-              live web & mobile apps using{' '}
-              <strong className="text-gray-900 dark:text-white">Next.js 16 App Router</strong>,{' '}
-              <strong className="text-orange-500">React Native</strong>, and{' '}
-              <strong className="text-gray-900 dark:text-white">MongoDB Atlas</strong>. 
-              Ready to ship scalable features from day one.
-            </p>
+            {/* Description */}
+            <motion.p
+              variants={itemVariants}
+              className="text-base text-gray-500 dark:text-gray-400 mb-8 max-w-lg leading-relaxed"
+            >
+              Full-Stack Engineer building scalable web & mobile apps with{' '}
+              <span className="font-semibold text-gray-900 dark:text-white">Next.js 16</span>,{' '}
+              <span className="font-semibold text-orange-500">React Native</span>, and{' '}
+              <span className="font-semibold text-gray-900 dark:text-white">Node.js</span>.
+              Ready to ship production features from day one.
+            </motion.p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 mb-10">
-              <button
-                onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
-                className="saas-btn-primary text-sm cursor-pointer">
+            <motion.div variants={itemVariants} className="flex flex-wrap gap-3 mb-10">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="btn-primary"
+              >
                 Hire Me Now <ArrowRight size={16} />
-              </button>
-              <button
-                onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
-                className="saas-btn-outline text-sm cursor-pointer">
-                View Portfolio
-              </button>
-            </div>
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                className="btn-ghost"
+              >
+                View Projects
+              </motion.button>
+              <motion.a
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                href="/Resume.pdf"
+                download
+                className="btn-ghost !px-5 flex items-center gap-2"
+              >
+                Resume ↓
+              </motion.a>
+            </motion.div>
 
-            {/* Stat Counter Bar */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {/* Stats */}
+            <motion.div variants={itemVariants} className="grid grid-cols-4 gap-3">
               {STATS.map((stat, i) => (
-                <div
+                <motion.div
                   key={i}
-                  className="bg-[#fafafa] dark:bg-[#0a0a0a] border border-gray-200 dark:border-zinc-800 rounded-xl p-4 text-center hover:border-orange-400 transition-colors">
-                  <div className="text-2xl font-black text-gray-900 dark:text-white">{stat.value}</div>
-                  <div className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-0.5">{stat.label}</div>
-                </div>
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="bento-card p-3 text-center"
+                >
+                  <div className="text-xl font-display font-extrabold gradient-orange">{stat.value}</div>
+                  <div className="text-[9px] font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-wider mt-0.5 leading-tight">{stat.label}</div>
+                </motion.div>
               ))}
-            </div>
-          </div>
+            </motion.div>
 
-          {/* ── Right: Profile Card ───────────────────────────── */}
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-            <div className="relative">
-              {/* Floating ring */}
-              <div className="absolute inset-0 rounded-full border-2 border-dashed border-orange-300/60 dark:border-orange-500/30 animate-spin-slow scale-110" />
+            {/* Social strip */}
+            <motion.div variants={itemVariants} className="flex items-center gap-4 mt-6">
+              <span className="text-xs text-gray-400 font-medium">Find me on</span>
+              <a href="https://github.com/Rachit3784" target="_blank" rel="noopener noreferrer"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-all"
+              >
+                <Github size={14} />
+              </a>
+              <a href="https://www.linkedin.com/in/rachit-gupta-099999261" target="_blank" rel="noopener noreferrer"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
+              >
+                <Linkedin size={14} />
+              </a>
+              <div className="h-px flex-1 bg-gray-100 dark:bg-white/5" />
+              <span className="text-xs font-medium text-gray-400">Jabalpur, India</span>
+            </motion.div>
+          </motion.div>
 
-              {/* Profile image */}
-              <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden ring-4 ring-white dark:ring-black shadow-2xl animate-float">
-                <img
+          {/* ── Right: Profile with orbit ── */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+            className="order-1 lg:order-2 flex justify-center lg:justify-end"
+          >
+            <div className="relative w-72 h-72 md:w-[340px] md:h-[340px] flex items-center justify-center">
+              {/* Outer rotating ring */}
+              <div className="absolute inset-0 rounded-full border border-dashed border-orange-300/40 dark:border-orange-500/20 animate-spin-slow" />
+              <div className="absolute inset-6 rounded-full border border-dashed border-orange-200/30 dark:border-orange-500/10 animate-spin-reverse" />
+
+              {/* Glow backdrop */}
+              <div className="absolute inset-8 rounded-full bg-gradient-to-br from-orange-400/20 to-orange-600/10 blur-2xl animate-glowPulse" />
+
+              {/* Orbit badges */}
+              {ORBIT_TECHS.map((tech, i) => (
+                <OrbitBadge key={i} tech={tech} delay={i * 0.5} />
+              ))}
+
+              {/* Profile image - hexagonal clip */}
+              <motion.div
+                whileHover={{ scale: 1.04 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                className="relative w-52 h-52 md:w-60 md:h-60 rounded-full overflow-hidden z-10 shadow-2xl animate-float"
+                style={{
+                  boxShadow: '0 0 0 4px rgba(249,115,22,0.3), 0 0 0 8px rgba(249,115,22,0.1), 0 20px 60px rgba(0,0,0,0.3)',
+                }}
+              >
+                <Image
                   src="/Profile.jpg"
                   alt="Rachit Gupta"
-                  className="object-cover w-full h-full"
+                  fill
+                  className="object-cover"
+                  priority
                 />
-              </div>
+                {/* Shimmer overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
+              </motion.div>
 
-              {/* Floating tech badges */}
-              <div className="absolute -top-4 -left-8 bg-white dark:bg-black rounded-xl shadow-lg border border-gray-100 dark:border-zinc-800 px-3 py-2 flex items-center gap-2">
-                <div className="w-6 h-6 bg-orange-500 rounded-md flex items-center justify-center">
-                  <Globe size={13} className="text-white" />
+              {/* Floating status card */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+                className="absolute -bottom-6 -right-4 glass-card rounded-2xl px-4 py-3 shadow-xl z-20 animate-float-reverse"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-ping-slow" />
+                  <span className="text-xs font-bold text-gray-900 dark:text-white">Open to Work</span>
                 </div>
-                <span className="text-xs font-bold text-gray-900 dark:text-white">Next.js 16</span>
-              </div>
+                <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5 font-medium">Available immediately</p>
+              </motion.div>
 
-              <div className="absolute -bottom-4 -right-8 bg-white dark:bg-black rounded-xl shadow-lg border border-gray-100 dark:border-zinc-800 px-3 py-2 flex items-center gap-2">
-                <div className="w-6 h-6 bg-orange-500 rounded-md flex items-center justify-center">
-                  <Smartphone size={13} className="text-white" />
+              {/* Floating tech card */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                className="absolute -top-4 -left-8 glass-card rounded-2xl px-4 py-3 shadow-xl z-20"
+              >
+                <div className="flex items-center gap-2">
+                  <Zap size={12} className="text-orange-500" />
+                  <span className="text-xs font-bold text-gray-900 dark:text-white">Next.js 16</span>
                 </div>
-                <span className="text-xs font-bold text-gray-900 dark:text-white">React Native</span>
-              </div>
-
-              <div className="absolute top-1/2 -right-10 -translate-y-1/2 bg-orange-500 rounded-xl shadow-lg px-3 py-2">
-                <span className="text-xs font-bold text-white">MongoDB</span>
-              </div>
+                <p className="text-[10px] text-orange-500 font-semibold mt-0.5">App Router Expert</p>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-        <button
-          onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })}
-          className="animate-bounce p-3 bg-white dark:bg-black border border-gray-200 dark:border-zinc-800 rounded-full shadow-md hover:border-orange-400 transition-colors cursor-pointer">
-          <ChevronDown className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-        </button>
-      </div>
+      <motion.div
+        style={{ opacity }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+      >
+        <motion.button
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+          className="flex flex-col items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors cursor-pointer"
+        >
+          <div className="scroll-indicator" />
+          <span className="text-[10px] font-medium tracking-widest uppercase opacity-60">Scroll</span>
+        </motion.button>
+      </motion.div>
 
       <FloatingActionButton />
     </section>

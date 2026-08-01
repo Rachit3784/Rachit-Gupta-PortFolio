@@ -1,41 +1,17 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from 'next/font/google';
 import "./globals.css";
 
-
-
-// app/layout.js
-import { Inter } from 'next/font/google';
-
-
-const inter = Inter({ subsets: ['latin'] });
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata = {
-  title: 'Rachit Gupta - Software Developer',
-  description: 'Portfolio website of Rachit Gupta, a software developer specializing in web and app development.',
+  title: 'Rachit Gupta — Full-Stack Engineer | Next.js & React Native Developer',
+  description: 'Portfolio of Rachit Gupta, Full-Stack Engineer specializing in Next.js 16, React Native, Node.js, and MongoDB. Available for hire - 2026 Batch.',
 };
 
 export default function RootLayout({ children }) {
   return (
-    // <html lang="en">
-    //   <body
-    //     className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
-    //   >
-    //     {children}
-    //   </body>
-    // </html>
-
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.variable} antialiased font-sans`}>
         {children}
       </body>
     </html>
