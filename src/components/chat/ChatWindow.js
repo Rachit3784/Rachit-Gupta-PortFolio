@@ -39,7 +39,13 @@ const ChatWindow = ({ user }) => {
 
   /* ── Socket.io Connection & Events ── */
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user) return;
+
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      if (Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+    }
 
     socket.connect();
     socket.emit('join_room', { userId: user.id });
@@ -59,6 +65,14 @@ const ChatWindow = ({ user }) => {
       setIsIncomingCall(true);
       setIncomingSignal(signal);
       setVideoModalOpen(true);
+
+      // Trigger OS/Browser Native Notification
+      if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification('📹 Incoming WebRTC Video Call', {
+          body: 'Rachit Gupta (Super Admin) is calling you on WebRTC Video Meeting...',
+          icon: '/favicon.ico',
+        });
+      }
     });
 
     return () => {
@@ -148,44 +162,52 @@ const ChatWindow = ({ user }) => {
     if (fileRef.current) fileRef.current.value = '';
   };
 
-  /* ── Send message ── */
+  /* ── Send message (Instant Optimistic Update — 0ms delay) ── */
   const handleSend = async (e) => {
     e?.preventDefault();
-    if (sending) return;
     if (!inputText.trim() && !selectedFile) return;
 
-    setSending(true);
-    setFileError('');
+    const content = inputText.trim();
+    const fileObj = selectedFile;
 
+    // 1. Create optimistic message immediately
+    const optimisticMsg = {
+      _id: 'temp_' + Date.now(),
+      role: 'user',
+      type: fileObj ? (fileObj.type === 'image' ? 'image' : 'pdf') : 'text',
+      content: content,
+      fileName: fileObj ? fileObj.name : null,
+      fileSize: fileObj ? fileObj.size : null,
+      createdAt: new Date().toISOString(),
+    };
+
+    // 2. Instant UI update (0ms delay!)
+    setMessages((prev) => [...prev, optimisticMsg]);
+    setInputText('');
+    removeFile();
+    setTimeout(scrollToBottom, 50);
+    inputRef.current?.focus();
+
+    // 3. Instant Socket.io broadcast to Super Admin Portal
+    socket.emit('user_send_message', { userId: user.id, message: optimisticMsg });
+
+    // 4. Background persistence to MongoDB
     try {
       const fd = new FormData();
-      if (inputText.trim()) fd.append('message', inputText.trim());
-      if (selectedFile)     fd.append('file', selectedFile.file);
+      if (content) fd.append('message', content);
+      if (fileObj) fd.append('file', fileObj.file);
 
       const res  = await fetch('/api/chat/send', { method: 'POST', body: fd });
       const data = await res.json();
-
-      if (!res.ok) {
-        setFileError(data.error || 'Failed to send message');
-        return;
+      if (res.ok && data.message) {
+        // Swap temp ID with MongoDB ID
+        setMessages((prev) =>
+          prev.map((m) => (m._id === optimisticMsg._id ? data.message : m))
+        );
+        lastPollRef.current = data.message.createdAt;
       }
-
-      setMessages((prev) => [...prev, data.message]);
-      setLastPollTs(data.message.createdAt);
-      lastPollRef.current = data.message.createdAt;
-      
-      // Broadcast via socket
-      socket.emit('user_send_message', { userId: user.id, message: data.message });
-
-      setInputText('');
-      removeFile();
-      setTimeout(scrollToBottom, 100);
-      inputRef.current?.focus();
-
-    } catch {
-      setFileError('Network error — please try again');
-    } finally {
-      setSending(false);
+    } catch (err) {
+      console.error('Background send error', err);
     }
   };
 

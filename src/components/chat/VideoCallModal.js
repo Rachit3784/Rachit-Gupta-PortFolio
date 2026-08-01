@@ -27,11 +27,25 @@ const VideoCallModal = ({ isOpen, onClose, user, isIncoming = false, incomingSig
   useEffect(() => {
     if (!isOpen) return;
 
+    setCallState(isIncoming ? 'incoming' : 'calling');
+
     let mounted = true;
 
     const startCall = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        let stream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        } catch (camErr) {
+          console.warn('Camera locked or busy on same laptop, falling back to audio stream', camErr);
+          try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+          } catch (audioErr) {
+            console.error('Audio stream also unavailable', audioErr);
+            throw audioErr;
+          }
+        }
+
         if (!mounted) return;
         localStreamRef.current = stream;
 
@@ -50,6 +64,9 @@ const VideoCallModal = ({ isOpen, onClose, user, isIncoming = false, incomingSig
         peer.ontrack = (event) => {
           if (remoteVideoRef.current && event.streams[0]) {
             remoteVideoRef.current.srcObject = event.streams[0];
+            remoteVideoRef.current.play().catch((e) => console.warn('Remote video play warning:', e));
+            // Ensure audio tracks are enabled
+            event.streams[0].getAudioTracks().forEach((t) => (t.enabled = true));
             setCallState('connected');
           }
         };
@@ -57,18 +74,18 @@ const VideoCallModal = ({ isOpen, onClose, user, isIncoming = false, incomingSig
         // Listen for ICE candidates
         peer.onicecandidate = (event) => {
           if (event.candidate) {
-            socket.emit('ice_candidate', { to: user.id, candidate: event.candidate });
+            socket.emit('ice_candidate', { to: 'admin', candidate: event.candidate });
           }
         };
 
-        // Outbound call
+        // Outbound call to Admin
         if (!isIncoming) {
           const offer = await peer.createOffer();
           await peer.setLocalDescription(offer);
           socket.emit('call_user', {
-            userToCall: user.id,
+            userToCall: 'admin',
             signalData: offer,
-            from:       user.id,
+            from:       user.id || user._id,
             name:       user.name,
           });
         }
@@ -86,6 +103,10 @@ const VideoCallModal = ({ isOpen, onClose, user, isIncoming = false, incomingSig
         await peerRef.current.setRemoteDescription(new RTCSessionDescription(signal));
         setCallState('connected');
       }
+    });
+
+    socket.on('user_busy', ({ message }) => {
+      setCallState('busy');
     });
 
     socket.on('ice_candidate', async (candidate) => {
@@ -115,7 +136,7 @@ const VideoCallModal = ({ isOpen, onClose, user, isIncoming = false, incomingSig
       await peerRef.current.setRemoteDescription(new RTCSessionDescription(incomingSignal));
       const answer = await peerRef.createAnswer();
       await peerRef.current.setLocalDescription(answer);
-      socket.emit('answer_call', { to: user.id, signal: answer });
+      socket.emit('answer_call', { to: 'admin', signal: answer });
       setCallState('connected');
     } catch (err) {
       console.error('Error accepting call', err);
@@ -135,7 +156,7 @@ const VideoCallModal = ({ isOpen, onClose, user, isIncoming = false, incomingSig
   };
 
   const endCall = () => {
-    socket.emit('end_call', { to: user.id });
+    socket.emit('end_call', { to: 'admin' });
     cleanup();
     setCallState('ended');
     setTimeout(onClose, 500);
@@ -223,6 +244,7 @@ const VideoCallModal = ({ isOpen, onClose, user, isIncoming = false, incomingSig
                   <p className="text-xs text-gray-400 mt-1">
                     {callState === 'calling' && 'Connecting WebRTC P2P Video Call...'}
                     {callState === 'incoming' && 'Incoming Video Call...'}
+                    {callState === 'busy' && '⚠️ User is currently busy on another video call. Please try again later.'}
                     {callState === 'ended' && 'Call Ended'}
                   </p>
                 </div>

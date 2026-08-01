@@ -69,7 +69,7 @@ const ChatHeader = ({ user, isOnline = true, onStartVideoCall }) => {
       {/* File limit warning note */}
       <div className="max-w-4xl mx-auto mt-2.5 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-medium backdrop-blur-md">
         <AlertTriangle size={13} className="flex-shrink-0 text-amber-400" />
-        <span>📌 <strong>Max File Size: 10MB</strong> — Images &amp; PDFs allowed. Real-time Telegram sync active.</span>
+        <span>📌 <strong>Max File Size: 10MB</strong> — Images &amp; PDFs allowed. Real-Time Socket.io &amp; WebRTC Active.</span>
       </div>
     </div>
   );
